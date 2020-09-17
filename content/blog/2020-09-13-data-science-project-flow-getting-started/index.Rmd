@@ -1,0 +1,62 @@
+---
+title: 'Data Science Project Flow: Getting Started'
+author: jobel
+date: '2020-09-13'
+slug: data-science-project-flow-getting-started
+categories:
+  - 'getting started'
+tags: []
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2020-09-13T11:52:11+02:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+image_preview: '/blog/data-science-project-flow-getting-started/featured.png'
+projects: []
+---
+
+Starting a new data science project (especially for the first time) can feel like a monumental task. You've probably read a bunch of data science articles or gone through an online course and you're keen to apply your new-found knowledge to some actual data (that does not involve petal width). 
+
+But where do you start? How do you go through this process so that you come out the other side feeling excited and motivated to continue your data science journey rather than feeling like some kind of imposter?
+
+## The Project Flow
+
+The solution to this is a project flow that guides you from getting started through to each step along the way. The most difficult part is just starting. 
+
+Trust me, I know the feeling all too well. 
+
+If you don't have a solid process for starting your data science project off on the right foot then you will most likely just procrastinate yourself out of actually doing anything! 
+
+I am going to share the process I follow whenever I start a data science project.
+
+```{r echo=FALSE}
+    knitr::include_graphics("project-flow-getting-started-inline1.png")
+```
+
+There are two starting positions in this project flow. Either you start with data or you start with a goal in mind. 
+
+1. Starting with a goal: your best option is to follow the blue arrows and move on to first finding the data and then tidying it. 
+2. Starting with data: you can either follow the green or blue arrows where you set your goals next or just start tidying it immediately and set your goals later. 
+
+The reason the process is so flexible is because you may not know what is possible with your data until you start tidying it up a bit and doing some basic exploration. This may spark up some ideas for how you want to move forward and then you can set more informed goals on how you want to proceed through the data. 
+
+Other times, the data could be neatly formatted and well documented and so just by going through the documentation you will get an idea of the the route that you want to take right away. In this case, you can set some goals early on and then tidy up the data to get it ready for your analyses.
+
+Also, you should not view this process as a concrete 1-2-3-done! sort of deal. It is intended to be looped and iterated until you have a good idea of what you want to achieve and how you will be going about performing your analyses.
+
+You will feel the invariable urge to skip setting some goals for your project. You will probably be super pumped to jump right into the deep end and write some awesome code but I urge you to resist this temptation. If you do not set clear goals at the start of the project, you will not know what success looks like and you will get caught in the clutches of analysis paralysis. 
+
+Success just feels better, so let's aim for that.
+
+## More Resources
+
+I recommend that you check out my other blog posts on the [best places to find data](/blog/finding-data/) and [setting achievable goals](/blog/setting-goals/) if you'd like to go into more detail on these parts of the process.
+
+Here are some quick actionable tips to take away if you don't have the time to check out the other posts right now:
+
+- Finding data: the dataset you choose is going to depend on what you're interested in and what motivates you. However, if you are just starting out or you are at a complete loss about what kinds of data you want to analyse then I highly recommend that you start with Kaggle. Browse through their datasets until you find something that interests you.
+- Setting goals: be smart about setting goals. Make sure you are specific and realistic about what you want to achieve and ensure you can measure what success looks like at the end. Lastly, give yourself a deadline so that you create a bit of positive friction that will motivate you to take action rather that procrastinate.

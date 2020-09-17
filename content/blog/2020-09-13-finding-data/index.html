@@ -1,0 +1,88 @@
+---
+title: 'Finding Data For Your Data Science Project: The 5 Best Places To Look'
+author: jobel
+date: '2020-09-13'
+slug: finding-data
+categories: ['getting started']
+tags: []
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2020-09-13T11:30:30+02:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+
+
+<p>If you’re starting your first (or next) data science project then chances are you’ll need to find one or more interesting datasets to analyse in your project. Well, look no further because I have a list of the best 5 places to look for great datasets to use in your project.</p>
+<p>The truth is you can find data almost anywhere - either pre-formatted and cleaned up for you or in its raw, dirty form. You can download plain flat files with nicely organised columns (but not necessarily clean) or you can scrape together your own dataset from websites or from multiple different sources.</p>
+<p>I’ll be dealing with the former here because if you’re anything like me, you’re less interested in <em>collecting</em> the data and more interested in <em>analysing</em> the data.</p>
+<p>I encourage you to choose datasets based on what you’re interested in and what motivates you. If you pick a dataset because it seems like a hot topic and it doesn’t actually excite you then you are more likely to never finish the project.</p>
+<p>I have organised the datasets into 5 categories below based on their overall theme. This is by no means an exhaustive list of datasets and there are of course many more places out there to find data but I hope that this list will give you a good place to start.</p>
+<div id="fight-club" class="section level2">
+<h2>Fight Club</h2>
+<p>Enter the first category: fight club. There are datasets available on competition websites that have been created specifically to use in predictive modelling. They are sometimes cleaned before hand with only a few tweaks needed depending on your use case.</p>
+<p>You don’t actually have to make a submission to the competition if that’s not your vibe, you can just download the data for use in your own custom projects.</p>
+<ol style="list-style-type: decimal">
+<li><a href="https://www.kaggle.com">Kaggle</a> - competition platform</li>
+<li><a href="https://www.datakind.org">DataKind</a> - volunteer projects</li>
+<li><a href="https://www.drivendata.org">DrivenData</a> competition platform</li>
+</ol>
+</div>
+<div id="paparazzi" class="section level2">
+<h2>Paparazzi</h2>
+<p>News sites that are focussed on data journalism are good places to look for data because they often release their (already cleaned) data publicly.</p>
+<p>If you enjoy their content you can also download the data they use in their articles and try to replicate the results yourself or come up with different problems or questions that you want to explore.</p>
+<ol style="list-style-type: decimal">
+<li><a href="https://fivethirtyeight.com">FiveThirtyEight</a> - data used in their articles can often be found on <a href="https://github.com/fivethirtyeight/data">Github</a>. Alternatively, if you’re using the R programming language, there is a package called <code>fivethirtyeight</code> (developed by Kim, Ismay, and Chunn <a href="https://cran.R-project.org/package=fivethirtyeight">2019</a>) that contains all datasets used by the site. Also, check out <a href="https://fivethirtyeight-r.netlify.com/articles/fivethirtyeight.html">this</a> website for a complete list of all datasets contained in the package.</li>
+<li><a href="https://www.buzzfeed.com">BuzzFeed</a> - data for this site can also be found on <a href="https://github.com/BuzzFeedNews/everything">Github</a></li>
+<li><a href="https://www.propublica.org/datastore/datasets">ProPublica</a> - they host a data store on their website with both free and paid data sets</li>
+</ol>
+</div>
+<div id="the-big-fish" class="section level2">
+<h2>The Big Fish</h2>
+<p>Cloud hosting platforms/providers often host big data sets. Big data is a whole other beast unto itself that may require a very different approach.</p>
+<p>I would not recommend starting here if you’re still getting used to querying and cleaning data and haven’t dealt with big data before.</p>
+<p>They are typically geared toward getting you to use their platform and so you would need to sign up for their services in order to get access to their data.</p>
+<ol style="list-style-type: decimal">
+<li><a href="https://registry.opendata.aws">AWS</a></li>
+<li><a href="https://cloud.google.com/bigquery/public-data/">Google Cloud</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Wikipedia:Database_download">Wikipedia</a></li>
+</ol>
+</div>
+<div id="the-hunter-gatherers" class="section level2">
+<h2>The Hunter-Gatherers</h2>
+<p>These hunter-gatherer sites collect data from multiple different sources and store them in their own repositories. They could be centred around a specific industry or they could be a mixture of different topics, each belonging to different sectors and industries.</p>
+<p>This is my favourite category to search for data in. Remember what I said about being less interested in <em>collecting</em> the data and more interested in <em>analysing</em> the data? Well, then I guess it’s a no-brainer that I’d be hanging out over here.</p>
+<p>However, be warned that some of these sites can have data that is quite dirty, especially if they are user-contributed with minimal documentation. But you’re a data scientist, right? Dirty data is like your home-away-from-home 😏</p>
+<ol style="list-style-type: decimal">
+<li><a href="https://datasetsearch.research.google.com">Google</a> custom dataset search</li>
+<li><a href="https://data.world">Data.world</a></li>
+<li>Github repo - <a href="https://github.com/awesomedata/awesome-public-datasets">Awesome public datasets</a> - a massive list of links to sites that host public datasets</li>
+<li><a href="https://data.worldbank.org">The World Bank</a></li>
+<li><a href="https://www.reddit.com/r/datasets/">r/datasets</a> - subreddit</li>
+<li><a href="https://archive.ics.uci.edu/ml/index.php">UCI Machine Learning Repository</a></li>
+<li><a href="https://www.quandl.com">Quandl</a> - economic and financial data</li>
+</ol>
+</div>
+<div id="flood-gates" class="section level2">
+<h2>Flood Gates</h2>
+<p>If you want to keep your data updated and refreshed at close to real-time then open the flood gates and let the stream in.</p>
+<p>Some sites make their data available at near real-time via an API but be aware that there are limitations on the number of API calls you can make or the number of data records returned within a certain interval. Generally, after this they make you pay for more calls or a greater data cap.</p>
+<ol style="list-style-type: decimal">
+<li><a href="https://developer.twitter.com/en/docs">Twitter</a></li>
+<li><a href="https://docs.github.com/en/rest">Github</a></li>
+<li><a href="https://www.quantopian.com/tutorials/getting-started">Quantopian</a> (stock trading)</li>
+</ol>
+</div>
+<div id="pick-a-dataset-and-start-your-project" class="section level2">
+<h2>Pick a dataset and start your project</h2>
+<p>Phew! There are a lot of options for datasets! The last thing you want to happen is to get stuck in procrasti-searching - procrastinating by endlessly searching these sites for datasets (did you see what I did there?).</p>
+<p>The most important thing is that you just pick a dataset and get started on your project. You will have plenty of time to come back to this list and these sites along your data science journey. One project does not make a data scientist so keep practicing.</p>
+<p>If you have a favourite source that you like to get your data from then leave it in the comments below - I would love to expand my list of data sources. You can never have too much data, can you?</p>
+</div>
