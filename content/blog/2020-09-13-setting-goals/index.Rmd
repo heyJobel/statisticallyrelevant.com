@@ -16,6 +16,7 @@ image:
   focal_point: ''
   preview_only: no
 projects: []
+comments: true
 ---
 
 Have you ever been really motivated to get stuck into analysing some data so you go ahead and download a really interesting dataset and (after a bit of googling) you import the data and go to town on it - you create summary tables, visualisations, fit a model, then go back to visualisations, then back to fitting some other model, and so on and so on. And then you wonder "what's the point of all this? I don't even know what I'm doing here". 
