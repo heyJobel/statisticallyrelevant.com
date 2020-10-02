@@ -44,10 +44,10 @@ social:
   link: '#contact'  # For a direct email link, use "mailto:test@example.org".
 - icon: twitter
   icon_pack: fab
-  link: https://twitter.com/heyJobel
+  link: https://twitter.com/joleenbelinda
 - icon: github
   icon_pack: fab
-  link: https://github.com/heyjobel
+  link: https://github.com/joleenbelinda
 - icon: pinterest
   icon_pack: fab
   link: https://pinterest.com/statisticallyrelevant
