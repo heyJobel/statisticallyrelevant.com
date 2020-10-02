@@ -1,0 +1,87 @@
+---
+title: How To Structure Your Data Science Project For Success
+author: jobel
+date: '2020-10-02'
+slug: data-science-project-structure
+categories:
+  'getting started'
+tags: []
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2020-10-02T23:09:33+02:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+
+
+<p>It’s easy to run headfirst into writing code and analysing data and forget about project layout, so make it part of your routine to get started with a simple structure that you either maintain throughout the project or evolve as you go.</p>
+<p>Future you (and others) will thank you for creating a well-structured, organised project. Also remember that ‘well-structured’ doesn’t have to mean complicated!</p>
+<div id="project-guidelines" class="section level2">
+<h2>Project Guidelines</h2>
+<ol style="list-style-type: decimal">
+<li><strong>Start simple, evolve as needed</strong> - don’t overcomplicate things when you’re just getting started because this may even lead to procrastinating and putting off the project because the project setup is so overwhelming.</li>
+<li><strong>The nature of your project will determine the structure</strong> - a simple exploratory project won’t even need all the elements described below but a growing machine learning model may need a more complex structure.</li>
+<li><strong>Keep reproducibility in mind</strong> - create your project as if you’re collaborating with a team (even if it’s just for you) because future-you is also on your team.</li>
+<li><strong>Stay flexible</strong> - adapt your structure to changes as they come up; don’t be afraid to change your entire project structure if you need to.</li>
+</ol>
+</div>
+<div id="rstudio-projects-filepaths" class="section level2">
+<h2>RStudio Projects &amp; Filepaths</h2>
+<p>RStudio projects make dealing with filepaths a breeze! Never set your working directory directly using <code>setwd()</code>. This could cause you to run into a few of problems:</p>
+<ul>
+<li>If you try to transfer your work to a new computer (especially if it is a different operating system) then you’d have to change your directory each time.</li>
+<li>Your project will no longer be reproducible without someone having to change the working directory.</li>
+<li>If you wanted to move your project to a new folder, you’d have to change the working directory.</li>
+</ul>
+<p>Keep it simple!</p>
+<p>RStudio projects are defined by the <code>.Rproj</code> file that is created for it and this specifies that the current project directory where the <code>.Rproj</code> file lives is ‘home’ and all other files are referenced <strong><em>relative</em></strong> to it.</p>
+<p>Besides filepaths, RStudio projects make it easy to switch from one project to another and have more than one project open at once. Projects are clearly separated from one another without worrying about overlapping environments and conflicts.</p>
+</div>
+<div id="folder-structure" class="section level2">
+<h2>Folder structure</h2>
+<p>Here is an overview of the steps for creating a new project:</p>
+<ol style="list-style-type: decimal">
+<li>In RStudio: create a new project using File &gt; New Project and create a new directory with the name of your project.</li>
+<li>Next you’ll create three subfolders inside your new project directory called <code>R</code>, <code>data</code>, and <code>output</code>.</li>
+<li>Back in our root project directory, create your main script file called <code>analysis.R</code>, your <code>README.md</code> file, and your <code>notebook.Rmd</code> file.</li>
+</ol>
+<pre class="r"><code>myproject/
+├── R/
+├── data/
+├── output/
+├── myproject.Rproj
+├── analysis.R
+├── README.md
+└── notebook.Rmd</code></pre>
+<div id="the-subfolders" class="section level3">
+<h3>The Subfolders</h3>
+<p>The <code>R</code> subfolder should contain all your function scripts. These scripts don’t actually do any analyses themselves but rather acts as a place to store your functions for easy reference and will later be called by the <code>analysis.R</code> file.</p>
+<p>This folder is optional, depending on your project. For example, you may do most of your analyses within your <code>notebook.Rmd</code> as in the case of projects consisting only of a few exploratory data analyses or you may just use your <code>analysis.R</code> file for all your analyses.</p>
+<p>You will keep all your data files in the <code>data</code> folder. These can be Excel files, csv’s, etc. Treat these files strictly as read-only. It is very tempting to correct a small typo or error in your data, especially if your data is in an Excel file but resist this! Do all your editing within R and keep these steps well-documented.</p>
+<p>The <code>output</code> folder is reserved for storing your model output, log files, or plots. You can create further subfolders for each of these to keep things organised if you generate a lot of output.</p>
+<p>One thing to note here is that these files should all be generated by your scripts so that you can easily run your script again and re-generate all relevant output files. So don’t be scared to delete old files if you no longer need them.</p>
+</div>
+<div id="the-root-files" class="section level3">
+<h3>The Root Files</h3>
+<p>Your <code>analysis.R</code> file would usually start with something like</p>
+<pre class="r"><code># Import packages
+library(cool_package)
+library(other_cool_package)
+
+# Run scripts
+source(&quot;R/import_data.R&quot;)
+source(&quot;R/clean.R&quot;)</code></pre>
+<p>… followed by all your analyses below it.</p>
+<p>The <code>notebook.Rmd</code> file is your holy grail as you progress through your project and test out different hypotheses or explore new ideas. Document everything and keep it all together is this notebook, like a diary of sorts.</p>
+<p>I have preferred a paper ‘laboratory’ notebook in the past but after coming across the idea of using a <code>.Rmd</code> file for this purpose from Hadley Wickham in his <a href="https://r4ds.had.co.nz/r-markdown-workflow.html">R for Data Science</a> book, I wish I had discovered it sooner! However, I do still keep a paper notebook to jot down ideas or questions that may come up as I go through the project or spontaneously as I go about my day, but I always make sure that I document these ideas at some point in my <code>notebook.Rmd</code> file.</p>
+<p>Lastly, there is the <code>README.md</code>. This file is for a quick overview of the purpose of the project, what you are trying to achieve, the data you are using (and it’s source) as well as a brief summary of your findings. Think of this as your project abstract so that someone can quickly get an overview of your project.</p>
+<p>That’s it!</p>
+<p>This project structure shouldn’t take you more than a few minutes to set up and will save you so much more time in the long run. Having a well organised project that is easy to share and come back to in the future is not to be underestimated!</p>
+</div>
+</div>
