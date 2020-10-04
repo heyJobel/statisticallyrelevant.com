@@ -15,7 +15,6 @@ image:
   caption: ''
   focal_point: ''
   preview_only: no
-image_preview: '/blog/data-science-project-flow-getting-started/featured.png'
 projects: []
 ---
 
@@ -54,7 +53,7 @@ Success just feels better, so let's aim for that.
 
 ## More Resources
 
-I recommend that you check out my other blog posts on the [best places to find data](/blog/finding-data/) and [setting achievable goals](/blog/setting-goals/) if you'd like to go into more detail on these parts of the process.
+I recommend that you check out my other blog posts on the [best places to find data](/post/finding-data/) and [setting achievable goals](/post/setting-goals/) if you'd like to go into more detail on these parts of the process.
 
 Here are some quick actionable tips to take away if you don't have the time to check out the other posts right now:
 
