@@ -1,0 +1,93 @@
+---
+title: 'Going Beyond Documentation in Data Science: Keeping a Lab Notebook'
+author: jobel
+date: '2020-10-12'
+slug: keeping-a-lab-notebook
+categories: []
+tags: []
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2020-10-12T16:41:27+02:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+Probably the most valuable resource to me during my Masters research project was my notebook. I recorded everything about my project (meeting notes, analyses, ideas, theories, rough drafts) and even summaries of research papers that were interesting or relevant to my research.
+
+Since starting some data science projects outside of research and academia, I have continued to keep notebooks and they have not failed me (unless I'm just an obsessive notebook keeper 🤷‍♀️).
+
+In this blog post, I hope to encourage you to also keep a notebook and give you some essential guidelines to follow when putting together a notebook for your project.
+
+## What is a lab notebook?
+
+A traditional lab notebook captures the thoughts, ideas, experiments, failures, successes and everything else that takes place during the course of lab work and a research project.
+
+This would work very similarly for a data scientist. During a project, a lab notebook would capture all aspects of the thought process and iterations of the project. You could record all your ideas and theories to solve the problem and outline the process you would like to take to test those ideas. If the idea succeeds or fails then you note it down and include a brief reason why you think it worked or failed. 
+
+A traditional lab notebook would typically be a physical notebook but any digital document-editing software would achieve the same results (such as Google Docs or Word). 
+
+However, for a data scientist my recommended approach would be to use a markdown-based document - such as RStudio's RMarkdown Notebooks or Jupyter Notebooks. These documents allow you to write code, view the output and add your own commentary in the same document without needing to go through the hassle of copy-paste-insert to get code and output into the document.
+
+## Why is it important to keep a lab notebook?
+
+It is common practice for a data scientist to prepare documentation at the end of the project detailing the purpose of the project, with a quick summary of the approach and then some information for deployment and steps around reproducing the analysis.
+
+However, this documentation would not detail all the ideas, theories and failed experiments throughout the project (yes, failures are just as important as the overall success of the project). 
+
+So, here are a couple of reasons to keep a lab notebook:
+
+- Clarity: keeping a lab notebook will force you to think clearly about your project as your progress through all the stages of your analysis. By recording your thoughts, asking questions and interpreting the results of your analyses, you will become clearer on your approach.
+- Context: future-you or collaborators will be able to understand the context behind your results: what you've tried, what worked, what didn't and what the next steps might be for improvements or future work.
+- Centralised: keeping every detail about your project in one place will make it easier to find something later on.
+
+## Essential elements of a lab notebook
+
+Hadley Wickham gives some great tips on what he calls an 'analysis notebook' in his book [R for Data Science](https://r4ds.had.co.nz/) which I have adapted and added a couple of extra elements that have been particularly helpful to me.
+
+Try to follow these guidelines when creating your lab notebook:
+
+- If you followed my other blog post on [how to structure a data science project](/post/data-science-project-structure/) then you would of created a file called `notebook.Rmd` for this exact purpose within your project folder.
+- Your notebook will start with a YAML header. As a minimum, it's a good idea to include a few key options. See the snippet below for an example from one of my projects:
+
+    ```yaml
+    ---
+    title: "Analysing the Pokedex, Generation 1-7"
+    author: "Joleen Belinda"
+    date: 2020-10-12
+    output: 
+      html_notebook:
+        toc: true
+        toc_float:
+          collapsed: false
+    ---
+    ```
+
+- Next, include some information on what you are hoping to achieve with your project and any goals that you may have (you can also fill in your goals later if you are doing some exploration first):
+
+    ```markdown
+    # Project Goals
+    This project aims to ...
+
+    This will be acheived through the following x goals:
+    1. First goal
+    2. Second goal
+    3. Third goal
+    ```
+
+- Next you'll want to include a setup chunk containing all the packages you load in for your analysis. There are 2 other packages that are recommended for better reproducibility:
+    - The `here` package - simplifies file path references so that you can avoid the headache of fixing references to files before you run an analysis. You can learn more about this package [here](https://www.rdocumentation.org/packages/here)
+    - The `renv` package - this package keeps track of all packages used in your project, including the versions. You can find the documentation [here](https://www.rdocumentation.org/packages/renv)
+- Keep your notebook organised with headers and sub-headers using the `# H1`, `## H2`, and `### H3` header tags for easy navigation. This will show up nicely in the table of contents in the HTML output of your notebook.
+- As you progress through your analysis, record everything and don't delete code chunks that didn't work out - just write a quick note about what went wrong and continue on.
+- If you need to do any data cleaning or if you are modifying the data in any way then clearly state why you are doing it.
+- At the end of your analysis, write a few closing remarks on what your findings were and give some recommendations for how the project can be improved so that if someone were to pick it up in the future they would know where to start.
+
+I strongly encourage you to keep a notebook the next time you start a new project. 
+
+Not only will you gain more clarity in your thinking but you will also make the process of creating documentation at the end of your project much easier!
+
