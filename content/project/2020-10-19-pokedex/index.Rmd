@@ -1,0 +1,233 @@
+---
+title: 'Analysing the Pokedex: Type Effectiveness and Experience Classification'
+author: jobel
+date: '2020-10-19'
+slug: pokedex
+categories: [data exploration]
+tags: []
+summary: ''
+authors: []
+external_link: ''
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+url_code: ''
+url_pdf: ''
+url_slides: ''
+url_video: ''
+slides: ''
+---
+
+> 'Gotta Catch 'Em All!'
+
+The goal of this project is exploration - to find insights in the pokedex data while also practicing the creation and customisation of visualisations in R. 
+
+More specifically, we will answer these questions:
+
+1) How do the various Pokemon types perform against each other (considering only Pokemon with single types)?
+2) Can the type effectiveness be shown in a visually appealing table? 
+3) Can the experience growth be classified, or grouped, into a new variable for easy summarisation?
+4) What are the average stats (attack, defense, speed, hp) per experience classification? What can we conclude from this?
+
+Data for this project was scraped from [Serebii](http://serebii.net/) and posted on Kaggle by [Rounak Banik](https://www.kaggle.com/rounakbanik).
+
+According to the [documentation](https://www.kaggle.com/rounakbanik/pokemon) this dataset contains information on all 802 Pokemon from all Seven Generations of Pokemon. The information contained in this dataset include base stats, performance against other types, height, weight, classification, egg steps, experience points, abilities, etc. 
+
+
+```{r setup, include = FALSE, message = FALSE, warning = FALSE}
+# Load packages
+library(tidyverse)
+library(ggplot2)
+library(ggthemes)
+library(ggpubr)
+library(data.table)
+library(formattable)
+
+# Set custom color variables
+customGreen0 = "#DeF7E9"
+customGreen = "#4CAF50"
+
+customBlue = "#4C79AF"
+customBlue0 = "#D6E7FB"
+```
+
+# Data Preparation
+
+First, we download the pokedex dataset directly from Kaggle and store it in the data folder.
+
+## Import Data
+
+```{r importData}
+
+pokedexRawData <- read.csv("data/pokemon.csv", sep = ",")
+
+```
+
+## First Look at the Data
+
+```{r glimpseData}
+
+pokedexRawData %>%
+  glimpse()
+
+```
+
+## Tidy Data
+
+Our data tidying steps are minimal. We start with converting blanks to `NA` and then if the same Pokemon type appears in both `type1` and `type2` then we make `type2` blank.
+
+Lastly, a Pokemon is classified as having a single or dual type. We will use this later when evaluating type effectiveness of each Pokemon.
+
+```{r tidyData,}
+
+pokedexTidyData <- pokedexRawData %>%
+  # Find all instances of blanks in the data and replace with NA
+  mutate_if(is.character, list(~na_if(.,""))) %>%
+  # If the same type appears in both type1 and type2 then make type2 blank
+  mutate(type2 = ifelse(type1 == type2, NA, type2)) %>%
+  # Classify Pokemon as either 'single type' or 'dual type' depending on whether it has a type listed under `type2`
+  mutate(type_category = ifelse(is.na(type2) == TRUE, "Single", "Dual")) 
+
+```
+
+# Type Effectiveness
+
+Pokemon of certain types tend to do better against Pokemon of some types and worse against others. For example, fire-type Pokemon do double damage against grass-type Pokemon but only half damage against water-type Pokemon.
+
+Below, we create a summary table of the effectiveness of single-type Pokemon.
+
+```{r pokedexTypeEff_tbl, message = FALSE, warning = FALSE}
+
+pokedexTypeEff_tbl <- pokedexTidyData %>%
+  mutate(type1 = str_to_title(type1)) %>%
+  filter(type_category == "Single") %>%
+  group_by(type1) %>%
+  summarise(Bug = mean(against_bug),
+            Dark = mean(against_dark),
+            Dragon = mean(against_dragon),
+            Electric = mean(against_electric),
+            Fairy = mean(against_fairy),
+            Fight = mean(against_fight),
+            Fire = mean(against_fire),
+            Flying = mean(against_flying),
+            Ghost = mean(against_ghost),
+            Grass = mean(against_grass),
+            Ground = mean(against_ground),
+            Ice = mean(against_ice),
+            Normal = mean(against_normal),
+            Poison = mean(against_poison),
+            Psychic = mean(against_psychic),
+            Rock = mean(against_rock),
+            Steel = mean(against_steel),
+            Water = mean(against_water))
+
+```
+
+A visually appealing table is created below using the `formattable` package. Damage is highlighted on a gradient from 0.0 to 2.0.
+
+```{r formattable_pokedexTypeEff_tbl}
+
+formattable(pokedexTypeEff_tbl, 
+            width = "100px", 
+            align = c("l","c","c","c","c", "c", "c", "c", "c", "c", "c", "c", "c", "c", "c", "c", "c", "c", "c"), 
+            list(`type1` = formatter("span", style = ~ style(color = "grey",font.weight = "bold")), 
+            area(col = 2:19) ~ color_tile(customBlue0, customBlue)))
+
+
+```
+
+# Experience Classification
+
+Experience growth represents the amount of experience it took for the Pokemon to reach level 100. Pokemon with a lower experience value means that it got to level 100 faster; while a higher experience value means the Pokemon leveled up a lot slower, requiring more experience to get there.
+
+Experience growth are classified into categories, provided by the website [Serebii](https://www.serebii.net/games/exp.shtml) using a formula that they explain on their website. 
+
+These are the categories:
+
+* Erratic - 600,000 EXP 
+* Fast - 800,000 EXP 
+* Medium-Fast - 1,000,000 EXP 
+* Medium-Slow - 1,059,860 EXP 
+* Slow - 1,250,000 EXP 
+* Fluctuating - 1,640,000 EXP
+
+
+```{r pokedexExpClass}
+
+# Create experience classification
+pokedexExpClass <- pokedexTidyData %>%
+  mutate(experience_class = ifelse(experience_growth < 600000, "Erratic", ifelse(experience_growth >= 600000 & experience_growth < 800000, "Fast", ifelse(experience_growth >= 800000 & experience_growth < 1000000, "Medium Fast", ifelse(experience_growth >= 1000000 & experience_growth < 1059860, "Medium Slow", ifelse(experience_growth >= 1059860 & experience_growth < 1250000, "Slow", ifelse(experience_growth >= 1250000, "Fluctuating", NA)))))))
+
+# Reorder factor levels
+pokedexExpClass <- pokedexExpClass %>%  
+  mutate(experience_class = fct_relevel(experience_class, c("Fast", "Medium Fast", "Medium Slow", "Slow", "Fluctuating")))
+
+```
+
+
+The four core stats of a Pokemon are: 
+* Attack - the amount of physical attack damage a Pokemon can do
+* Defense - the amount of physical attack damage a Pokemon can take
+* Speed - determines when a Pokemon can attack in a turn
+* HP - the number of health points a Pokemon has
+
+```{r expClass_tbl}
+
+expClass_tbl <- pokedexExpClass %>%
+  group_by(experience_class) %>%
+  summarise(avg_attack = mean(attack),
+            avg_defense = mean(defense),
+            avg_speed = mean(speed),
+            avg_hp = mean(hp))
+
+```
+
+In the plot below, the average stat is shown by experience classification.
+
+```{r pokedexExpClass_plots, fig.height=7, fig.width=10}
+
+# Attack
+attack <- ggplot(data = expClass_tbl, aes(x = experience_class, y = avg_attack)) +
+  geom_bar(stat = "identity", fill = customBlue, color = customBlue) +
+  geom_text(aes(label = round(avg_attack, 0)), vjust = 1.6, color = "white") +
+  labs(title = "Attack", x = "", y = "") +
+  theme_pander() +
+  theme(axis.title.x = element_text(margin = margin(10, 5, 10, 5)),
+        plot.title = element_text(hjust = 0.5, size = 20, margin = margin(10, 5, 10, 5)))
+
+# Defense
+defense <- ggplot(data = expClass_tbl, aes(x = experience_class, y = avg_defense)) +
+  geom_bar(stat = "identity", fill = customBlue, color = customBlue) +
+  geom_text(aes(label = round(avg_defense, 0)), vjust = 1.6, color = "white") +
+  labs(title = "Defense", x = "", y = "") +
+  theme_pander() +
+  theme(axis.title.x = element_text(margin = margin(10, 5, 10, 5)),
+        plot.title = element_text(hjust = 0.5, size = 20, margin = margin(10, 5, 10, 5)))
+
+# Speed
+speed <- ggplot(data = expClass_tbl, aes(x = experience_class, y = avg_speed)) +
+  geom_bar(stat = "identity", fill = customBlue, color = customBlue) +
+  geom_text(aes(label = round(avg_speed, 0)), vjust = 1.6, color = "white") +
+  labs(title = "Speed", x = "", y = "") +
+  theme_pander() +
+  theme(axis.title.x = element_text(margin = margin(10, 5, 10, 5)),
+        plot.title = element_text(hjust = 0.5, size = 20, margin = margin(10, 5, 10, 5)))
+
+# HP
+hp <- ggplot(data = expClass_tbl, aes(x = experience_class, y = avg_hp)) +
+  geom_bar(stat = "identity", fill = customBlue, color = customBlue) +
+  geom_text(aes(label = round(avg_hp, 0)), vjust = 1.6, color = "white") +
+  labs(title = "HP", x = "", y = "") +
+  theme_pander() +
+  theme(axis.title.x = element_text(margin = margin(10, 5, 10, 5)),
+        plot.title = element_text(hjust = 0.5, size = 20, margin = margin(10, 5, 10, 5)))
+
+# Plot all          
+ggarrange(attack, defense, speed, hp,
+                    ncol = 2, nrow = 2)
+```
+
+Based on this plot it is clear that Pokemon with 'fluctuating' experience growth (i.e. experience growth over 1 250 000) have higher average stats across all 4 core stats.
+
+So it seems that patience wins here. Hang on to the Pokemon that take longer to reach level 100, it will surely pay off!

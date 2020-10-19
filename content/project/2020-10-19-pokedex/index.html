@@ -1,0 +1,1340 @@
+---
+title: 'Analysing the Pokedex: Type Effectiveness and Experience Classification'
+author: jobel
+date: '2020-10-19'
+slug: pokedex
+categories: [data exploration]
+tags: []
+summary: ''
+authors: []
+external_link: ''
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+url_code: ''
+url_pdf: ''
+url_slides: ''
+url_video: ''
+slides: ''
+---
+
+
+
+<blockquote>
+<p>‘Gotta Catch ’Em All!’</p>
+</blockquote>
+<p>The goal of this project is exploration - to find insights in the pokedex data while also practicing the creation and customisation of visualisations in R.</p>
+<p>More specifically, we will answer these questions:</p>
+<ol style="list-style-type: decimal">
+<li>How do the various Pokemon types perform against each other (considering only Pokemon with single types)?</li>
+<li>Can the type effectiveness be shown in a visually appealing table?</li>
+<li>Can the experience growth be classified, or grouped, into a new variable for easy summarisation?</li>
+<li>What are the average stats (attack, defense, speed, hp) per experience classification? What can we conclude from this?</li>
+</ol>
+<p>Data for this project was scraped from <a href="http://serebii.net/">Serebii</a> and posted on Kaggle by <a href="https://www.kaggle.com/rounakbanik">Rounak Banik</a>.</p>
+<p>According to the <a href="https://www.kaggle.com/rounakbanik/pokemon">documentation</a> this dataset contains information on all 802 Pokemon from all Seven Generations of Pokemon. The information contained in this dataset include base stats, performance against other types, height, weight, classification, egg steps, experience points, abilities, etc.</p>
+<div id="data-preparation" class="section level1">
+<h1>Data Preparation</h1>
+<p>First, we download the pokedex dataset directly from Kaggle and store it in the data folder.</p>
+<div id="import-data" class="section level2">
+<h2>Import Data</h2>
+<pre class="r"><code>pokedexRawData &lt;- read.csv(&quot;data/pokemon.csv&quot;, sep = &quot;,&quot;)</code></pre>
+</div>
+<div id="first-look-at-the-data" class="section level2">
+<h2>First Look at the Data</h2>
+<pre class="r"><code>pokedexRawData %&gt;%
+  glimpse()</code></pre>
+<pre><code>## Rows: 801
+## Columns: 41
+## $ abilities         &lt;chr&gt; &quot;[&#39;Overgrow&#39;, &#39;Chlorophyll&#39;]&quot;, &quot;[&#39;Overgrow&#39;, &#39;Chlor…
+## $ against_bug       &lt;dbl&gt; 1.00, 1.00, 1.00, 0.50, 0.50, 0.25, 1.00, 1.00, 1.0…
+## $ against_dark      &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
+## $ against_dragon    &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
+## $ against_electric  &lt;dbl&gt; 0.5, 0.5, 0.5, 1.0, 1.0, 2.0, 2.0, 2.0, 2.0, 1.0, 1…
+## $ against_fairy     &lt;dbl&gt; 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 1.0, 1.0, 1.0, 1.0, 1…
+## $ against_fight     &lt;dbl&gt; 0.50, 0.50, 0.50, 1.00, 1.00, 0.50, 1.00, 1.00, 1.0…
+## $ against_fire      &lt;dbl&gt; 2.0, 2.0, 2.0, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 2.0, 2…
+## $ against_flying    &lt;dbl&gt; 2.0, 2.0, 2.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 2…
+## $ against_ghost     &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, …
+## $ against_grass     &lt;dbl&gt; 0.25, 0.25, 0.25, 0.50, 0.50, 0.25, 2.00, 2.00, 2.0…
+## $ against_ground    &lt;dbl&gt; 1.0, 1.0, 1.0, 2.0, 2.0, 0.0, 1.0, 1.0, 1.0, 0.5, 0…
+## $ against_ice       &lt;dbl&gt; 2.0, 2.0, 2.0, 0.5, 0.5, 1.0, 0.5, 0.5, 0.5, 1.0, 1…
+## $ against_normal    &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
+## $ against_poison    &lt;dbl&gt; 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1…
+## $ against_psychic   &lt;dbl&gt; 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 1, 1, …
+## $ against_rock      &lt;dbl&gt; 1, 1, 1, 2, 2, 4, 1, 1, 1, 2, 2, 4, 2, 2, 2, 2, 2, …
+## $ against_steel     &lt;dbl&gt; 1.0, 1.0, 1.0, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 1.0, 1…
+## $ against_water     &lt;dbl&gt; 0.5, 0.5, 0.5, 2.0, 2.0, 2.0, 0.5, 0.5, 0.5, 1.0, 1…
+## $ attack            &lt;int&gt; 49, 62, 100, 52, 64, 104, 48, 63, 103, 30, 20, 45, …
+## $ base_egg_steps    &lt;int&gt; 5120, 5120, 5120, 5120, 5120, 5120, 5120, 5120, 512…
+## $ base_happiness    &lt;int&gt; 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70,…
+## $ base_total        &lt;int&gt; 318, 405, 625, 309, 405, 634, 314, 405, 630, 195, 2…
+## $ capture_rate      &lt;chr&gt; &quot;45&quot;, &quot;45&quot;, &quot;45&quot;, &quot;45&quot;, &quot;45&quot;, &quot;45&quot;, &quot;45&quot;, &quot;45&quot;, &quot;45…
+## $ classfication     &lt;chr&gt; &quot;Seed Pokémon&quot;, &quot;Seed Pokémon&quot;, &quot;Seed Pokémon&quot;, &quot;Li…
+## $ defense           &lt;int&gt; 49, 63, 123, 43, 58, 78, 65, 80, 120, 35, 55, 50, 3…
+## $ experience_growth &lt;int&gt; 1059860, 1059860, 1059860, 1059860, 1059860, 105986…
+## $ height_m          &lt;dbl&gt; 0.7, 1.0, 2.0, 0.6, 1.1, 1.7, 0.5, 1.0, 1.6, 0.3, 0…
+## $ hp                &lt;int&gt; 45, 60, 80, 39, 58, 78, 44, 59, 79, 45, 50, 60, 40,…
+## $ japanese_name     &lt;chr&gt; &quot;Fushigidaneフシギダネ&quot;, &quot;Fushigisouフシギソウ&quot;, &quot;Fushigibana…
+## $ name              &lt;chr&gt; &quot;Bulbasaur&quot;, &quot;Ivysaur&quot;, &quot;Venusaur&quot;, &quot;Charmander&quot;, &quot;…
+## $ percentage_male   &lt;dbl&gt; 88.1, 88.1, 88.1, 88.1, 88.1, 88.1, 88.1, 88.1, 88.…
+## $ pokedex_number    &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, …
+## $ sp_attack         &lt;int&gt; 65, 80, 122, 60, 80, 159, 50, 65, 135, 20, 25, 90, …
+## $ sp_defense        &lt;int&gt; 65, 80, 120, 50, 65, 115, 64, 80, 115, 20, 25, 80, …
+## $ speed             &lt;int&gt; 45, 60, 80, 65, 80, 100, 43, 58, 78, 45, 30, 70, 50…
+## $ type1             &lt;chr&gt; &quot;grass&quot;, &quot;grass&quot;, &quot;grass&quot;, &quot;fire&quot;, &quot;fire&quot;, &quot;fire&quot;, …
+## $ type2             &lt;chr&gt; &quot;poison&quot;, &quot;poison&quot;, &quot;poison&quot;, &quot;&quot;, &quot;&quot;, &quot;flying&quot;, &quot;&quot;,…
+## $ weight_kg         &lt;dbl&gt; 6.9, 13.0, 100.0, 8.5, 19.0, 90.5, 9.0, 22.5, 85.5,…
+## $ generation        &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
+## $ is_legendary      &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …</code></pre>
+</div>
+<div id="tidy-data" class="section level2">
+<h2>Tidy Data</h2>
+<p>Our data tidying steps are minimal. We start with converting blanks to <code>NA</code> and then if the same Pokemon type appears in both <code>type1</code> and <code>type2</code> then we make <code>type2</code> blank.</p>
+<p>Lastly, a Pokemon is classified as having a single or dual type. We will use this later when evaluating type effectiveness of each Pokemon.</p>
+<pre class="r"><code>pokedexTidyData &lt;- pokedexRawData %&gt;%
+  # Find all instances of blanks in the data and replace with NA
+  mutate_if(is.character, list(~na_if(.,&quot;&quot;))) %&gt;%
+  # If the same type appears in both type1 and type2 then make type2 blank
+  mutate(type2 = ifelse(type1 == type2, NA, type2)) %&gt;%
+  # Classify Pokemon as either &#39;single type&#39; or &#39;dual type&#39; depending on whether it has a type listed under `type2`
+  mutate(type_category = ifelse(is.na(type2) == TRUE, &quot;Single&quot;, &quot;Dual&quot;)) </code></pre>
+</div>
+</div>
+<div id="type-effectiveness" class="section level1">
+<h1>Type Effectiveness</h1>
+<p>Pokemon of certain types tend to do better against Pokemon of some types and worse against others. For example, fire-type Pokemon do double damage against grass-type Pokemon but only half damage against water-type Pokemon.</p>
+<p>Below, we create a summary table of the effectiveness of single-type Pokemon.</p>
+<pre class="r"><code>pokedexTypeEff_tbl &lt;- pokedexTidyData %&gt;%
+  mutate(type1 = str_to_title(type1)) %&gt;%
+  filter(type_category == &quot;Single&quot;) %&gt;%
+  group_by(type1) %&gt;%
+  summarise(Bug = mean(against_bug),
+            Dark = mean(against_dark),
+            Dragon = mean(against_dragon),
+            Electric = mean(against_electric),
+            Fairy = mean(against_fairy),
+            Fight = mean(against_fight),
+            Fire = mean(against_fire),
+            Flying = mean(against_flying),
+            Ghost = mean(against_ghost),
+            Grass = mean(against_grass),
+            Ground = mean(against_ground),
+            Ice = mean(against_ice),
+            Normal = mean(against_normal),
+            Poison = mean(against_poison),
+            Psychic = mean(against_psychic),
+            Rock = mean(against_rock),
+            Steel = mean(against_steel),
+            Water = mean(against_water))</code></pre>
+<p>A visually appealing table is created below using the <code>formattable</code> package. Damage is highlighted on a gradient from 0.0 to 2.0.</p>
+<pre class="r"><code>formattable(pokedexTypeEff_tbl, 
+            width = &quot;100px&quot;, 
+            align = c(&quot;l&quot;,&quot;c&quot;,&quot;c&quot;,&quot;c&quot;,&quot;c&quot;, &quot;c&quot;, &quot;c&quot;, &quot;c&quot;, &quot;c&quot;, &quot;c&quot;, &quot;c&quot;, &quot;c&quot;, &quot;c&quot;, &quot;c&quot;, &quot;c&quot;, &quot;c&quot;, &quot;c&quot;, &quot;c&quot;, &quot;c&quot;), 
+            list(`type1` = formatter(&quot;span&quot;, style = ~ style(color = &quot;grey&quot;,font.weight = &quot;bold&quot;)), 
+            area(col = 2:19) ~ color_tile(customBlue0, customBlue)))</code></pre>
+<table class="table table-condensed">
+<thead>
+<tr>
+<th style="text-align:left;">
+type1
+</th>
+<th style="text-align:center;">
+Bug
+</th>
+<th style="text-align:center;">
+Dark
+</th>
+<th style="text-align:center;">
+Dragon
+</th>
+<th style="text-align:center;">
+Electric
+</th>
+<th style="text-align:center;">
+Fairy
+</th>
+<th style="text-align:center;">
+Fight
+</th>
+<th style="text-align:center;">
+Fire
+</th>
+<th style="text-align:center;">
+Flying
+</th>
+<th style="text-align:center;">
+Ghost
+</th>
+<th style="text-align:center;">
+Grass
+</th>
+<th style="text-align:center;">
+Ground
+</th>
+<th style="text-align:center;">
+Ice
+</th>
+<th style="text-align:center;">
+Normal
+</th>
+<th style="text-align:center;">
+Poison
+</th>
+<th style="text-align:center;">
+Psychic
+</th>
+<th style="text-align:center;">
+Rock
+</th>
+<th style="text-align:center;">
+Steel
+</th>
+<th style="text-align:center;">
+Water
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<span style="color: grey; font-weight: bold">Bug </span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<span style="color: grey; font-weight: bold">Dark </span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #d6e7fb">0.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<span style="color: grey; font-weight: bold">Dragon </span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<span style="color: grey; font-weight: bold">Electric</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<span style="color: grey; font-weight: bold">Fairy </span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #d6e7fb">0.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<span style="color: grey; font-weight: bold">Fighting</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<span style="color: grey; font-weight: bold">Fire </span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<span style="color: grey; font-weight: bold">Flying </span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #d6e7fb">0.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<span style="color: grey; font-weight: bold">Ghost </span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #d6e7fb">0.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #d6e7fb">0.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<span style="color: grey; font-weight: bold">Grass </span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<span style="color: grey; font-weight: bold">Ground </span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #d6e7fb">0.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<span style="color: grey; font-weight: bold">Ice </span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<span style="color: grey; font-weight: bold">Normal </span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #d6e7fb">0.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<span style="color: grey; font-weight: bold">Poison </span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<span style="color: grey; font-weight: bold">Psychic </span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<span style="color: grey; font-weight: bold">Rock </span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<span style="color: grey; font-weight: bold">Steel </span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #d6e7fb">0.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<span style="color: grey; font-weight: bold">Water </span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #4c79af">2.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #91b0d5">1.0</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+<td style="text-align:center;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b3cbe8">0.5</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="experience-classification" class="section level1">
+<h1>Experience Classification</h1>
+<p>Experience growth represents the amount of experience it took for the Pokemon to reach level 100. Pokemon with a lower experience value means that it got to level 100 faster; while a higher experience value means the Pokemon leveled up a lot slower, requiring more experience to get there.</p>
+<p>Experience growth are classified into categories, provided by the website <a href="https://www.serebii.net/games/exp.shtml">Serebii</a> using a formula that they explain on their website.</p>
+<p>These are the categories:</p>
+<ul>
+<li>Erratic - 600,000 EXP</li>
+<li>Fast - 800,000 EXP</li>
+<li>Medium-Fast - 1,000,000 EXP</li>
+<li>Medium-Slow - 1,059,860 EXP</li>
+<li>Slow - 1,250,000 EXP</li>
+<li>Fluctuating - 1,640,000 EXP</li>
+</ul>
+<pre class="r"><code># Create experience classification
+pokedexExpClass &lt;- pokedexTidyData %&gt;%
+  mutate(experience_class = ifelse(experience_growth &lt; 600000, &quot;Erratic&quot;, ifelse(experience_growth &gt;= 600000 &amp; experience_growth &lt; 800000, &quot;Fast&quot;, ifelse(experience_growth &gt;= 800000 &amp; experience_growth &lt; 1000000, &quot;Medium Fast&quot;, ifelse(experience_growth &gt;= 1000000 &amp; experience_growth &lt; 1059860, &quot;Medium Slow&quot;, ifelse(experience_growth &gt;= 1059860 &amp; experience_growth &lt; 1250000, &quot;Slow&quot;, ifelse(experience_growth &gt;= 1250000, &quot;Fluctuating&quot;, NA)))))))
+
+# Reorder factor levels
+pokedexExpClass &lt;- pokedexExpClass %&gt;%  
+  mutate(experience_class = fct_relevel(experience_class, c(&quot;Fast&quot;, &quot;Medium Fast&quot;, &quot;Medium Slow&quot;, &quot;Slow&quot;, &quot;Fluctuating&quot;)))</code></pre>
+<p>The four core stats of a Pokemon are:
+* Attack - the amount of physical attack damage a Pokemon can do
+* Defense - the amount of physical attack damage a Pokemon can take
+* Speed - determines when a Pokemon can attack in a turn
+* HP - the number of health points a Pokemon has</p>
+<pre class="r"><code>expClass_tbl &lt;- pokedexExpClass %&gt;%
+  group_by(experience_class) %&gt;%
+  summarise(avg_attack = mean(attack),
+            avg_defense = mean(defense),
+            avg_speed = mean(speed),
+            avg_hp = mean(hp))</code></pre>
+<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<p>In the plot below, the average stat is shown by experience classification.</p>
+<pre class="r"><code># Attack
+attack &lt;- ggplot(data = expClass_tbl, aes(x = experience_class, y = avg_attack)) +
+  geom_bar(stat = &quot;identity&quot;, fill = customBlue, color = customBlue) +
+  geom_text(aes(label = round(avg_attack, 0)), vjust = 1.6, color = &quot;white&quot;) +
+  labs(title = &quot;Attack&quot;, x = &quot;&quot;, y = &quot;&quot;) +
+  theme_pander() +
+  theme(axis.title.x = element_text(margin = margin(10, 5, 10, 5)),
+        plot.title = element_text(hjust = 0.5, size = 20, margin = margin(10, 5, 10, 5)))
+
+# Defense
+defense &lt;- ggplot(data = expClass_tbl, aes(x = experience_class, y = avg_defense)) +
+  geom_bar(stat = &quot;identity&quot;, fill = customBlue, color = customBlue) +
+  geom_text(aes(label = round(avg_defense, 0)), vjust = 1.6, color = &quot;white&quot;) +
+  labs(title = &quot;Defense&quot;, x = &quot;&quot;, y = &quot;&quot;) +
+  theme_pander() +
+  theme(axis.title.x = element_text(margin = margin(10, 5, 10, 5)),
+        plot.title = element_text(hjust = 0.5, size = 20, margin = margin(10, 5, 10, 5)))
+
+# Speed
+speed &lt;- ggplot(data = expClass_tbl, aes(x = experience_class, y = avg_speed)) +
+  geom_bar(stat = &quot;identity&quot;, fill = customBlue, color = customBlue) +
+  geom_text(aes(label = round(avg_speed, 0)), vjust = 1.6, color = &quot;white&quot;) +
+  labs(title = &quot;Speed&quot;, x = &quot;&quot;, y = &quot;&quot;) +
+  theme_pander() +
+  theme(axis.title.x = element_text(margin = margin(10, 5, 10, 5)),
+        plot.title = element_text(hjust = 0.5, size = 20, margin = margin(10, 5, 10, 5)))
+
+# HP
+hp &lt;- ggplot(data = expClass_tbl, aes(x = experience_class, y = avg_hp)) +
+  geom_bar(stat = &quot;identity&quot;, fill = customBlue, color = customBlue) +
+  geom_text(aes(label = round(avg_hp, 0)), vjust = 1.6, color = &quot;white&quot;) +
+  labs(title = &quot;HP&quot;, x = &quot;&quot;, y = &quot;&quot;) +
+  theme_pander() +
+  theme(axis.title.x = element_text(margin = margin(10, 5, 10, 5)),
+        plot.title = element_text(hjust = 0.5, size = 20, margin = margin(10, 5, 10, 5)))
+
+# Plot all          
+ggarrange(attack, defense, speed, hp,
+                    ncol = 2, nrow = 2)</code></pre>
+<p><img src="/project/2020-10-19-pokedex/index_files/figure-html/pokedexExpClass_plots-1.png" width="960" /></p>
+<p>Based on this plot it is clear that Pokemon with ‘fluctuating’ experience growth (i.e. experience growth over 1 250 000) have higher average stats across all 4 core stats.</p>
+<p>So it seems that patience wins here. Hang on to the Pokemon that take longer to reach level 100, it will surely pay off!</p>
+</div>
