@@ -1,0 +1,75 @@
+---
+title: Beginners Guide to Building a Data Science Portfolio
+author: jobel
+date: '2020-10-26'
+slug: beginners-guide-to-building-a-data-science-portfolio
+categories:
+  - getting started
+tags: []
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2020-10-26T21:08:55+02:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+If you have little to no experience as a data scientist, then you have to find a way to demonstrate that you have the skills to do the job. 
+
+You can achieve this with a portfolio and this is arguably the most important part of your application.
+
+However, working on projects and putting together a portfolio is about more than just the job application.
+
+Through the process of working on data science projects you will **learn** and **grow** as a data scientist, exploring new and exciting methods and techniques and expose yourself to new ways of thinking about problems and how to solve them. You will get to know the common packages and functions as you use them and you will eventually be able to write code without needing to search on Google every few minutes (this one is particularly satisfying). 
+
+You will build **confidence** in yourself and your abilities and this will show when you are sitting down for an interview.
+
+## The key pillars of a data science portfolio
+
+- **Communication** - you should be able to clearly communicate each aspect of your project and then present the final work in an appealing way that captures the readers attention and tells a story.
+- **Collaboration** - you should participate in a group project at least once to show that you can work well in a team.
+- **Critical thinking** - your projects should demonstrate your ability to reason with data, generate questions, and discover patterns in your data. 
+- **Competence** - your projects should demonstrate that you have the right skills for the job and that you can do them well.
+
+## The types of projects to include in your data science portfolio
+
+Always aim to stand out in the crowd; *be memorable*. 
+
+Don't re-use common data sets as all this shows is that you can follow a tutorial.
+
+Find unique, interesting data sets for your projects that you are genuinely curious about: 
+- Scrape it off the web (Wikipedia is a goldmine for this)
+- Conduct surveys with friends, family, students, or faculty members of your university (if you get creative here you can generate a pretty interesting data set)
+- Use real data rather than fake, simulated data sets and come to real conclusions about your data
+
+See my post on [finding data](/post/finding-data/) for a couple of great places to start in your search for data.
+
+Your projects should show that you have mastery in a particular area within data science, so consider these two guidelines when choosing what projects to include in your portfolio:
+
+- **Specialty** - what area of data science will you specialise in? By specialising in a specific area, you will be able to obtain mastery much faster and you will get noticed as something of an expert. For example, there is Natural Language Processing, financial forecasting, or visualisation and storytelling. Do your research and find the specialty that interests you and start there.
+- **Domain** - what domain knowledge will potential employers expect you to have, even at a basic level? Are you looking for a position in marketing, finance, health, etc? Tailor your projects and data around these areas.
+
+## Where to publish your first data science portfolio
+
+When you're just getting started with your portfolio then I recommend that you create a Github account and publish all of your projects there. Check out [this tutorial](https://towardsdatascience.com/introduction-to-github-for-data-scientists-2cf8b9b25fba) to master the basics of Github as a data scientist.
+
+The most important part of each of your Github repositories is the `README`. This is what readers will see first and they will likely not stick around to sift through hundreds of lines of complicated code, trying to figure out what you were trying to accomplish.
+
+A `README` is written in markdown. I recommend [this guide](https://guides.github.com/features/mastering-markdown/) for getting started with the markdown syntax.
+
+Your `README` should clearly show these important aspects of your project:
+
+- The goals and success measures of your project
+- The techniques and methods you use
+- The key findings or end result of your project
+- How to reproduce the analysis
+
+A portfolio should consist of around 5 core projects that you regularly go back to - making improvements, applying new methods, or scrapping the project entirely in favour of a bigger, more complex project to suit any new found skills.
+
+Data science projects will undoubtedly enable you to grow as a data scientist both when you are on the job hunt and even while you work at your dream job. 
+
+Growth and learning does not stop when you get the job. As a data scientist, you will always be learning and data science will always be growing. 
