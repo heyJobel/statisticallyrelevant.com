@@ -86,4 +86,4 @@ Each project is unique and there is no right or wrong goal.
 
 It all depends on what you want to achieve.
 
-{{<subscribe>}}
+{{<subscribe-sticky-bar>}}

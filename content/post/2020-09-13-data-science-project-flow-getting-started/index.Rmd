@@ -60,4 +60,4 @@ Here are some quick actionable tips to take away if you don't have the time to c
 - Finding data: the dataset you choose is going to depend on what you're interested in and what motivates you. However, if you are just starting out or you are at a complete loss about what kinds of data you want to analyse then I highly recommend that you start with Kaggle. Browse through their datasets until you find something that interests you.
 - Setting goals: be smart about setting goals. Make sure you are specific and realistic about what you want to achieve and ensure you can measure what success looks like at the end. Lastly, give yourself a deadline so that you create a bit of positive friction that will motivate you to take action rather that procrastinate.
 
-{{<subscribe>}}
+{{<subscribe-sticky-bar>}}

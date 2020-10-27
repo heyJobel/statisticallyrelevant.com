@@ -231,3 +231,5 @@ ggarrange(attack, defense, speed, hp,
 Based on this plot it is clear that Pokemon with 'fluctuating' experience growth (i.e. experience growth over 1 250 000) have higher average stats across all 4 core stats.
 
 So it seems that patience wins here. Hang on to the Pokemon that take longer to reach level 100, it will surely pay off!
+
+{{<subscribe-sticky-bar>}}

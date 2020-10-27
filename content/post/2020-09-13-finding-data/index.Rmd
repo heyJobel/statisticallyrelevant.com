@@ -93,4 +93,4 @@ The most important thing is that you just pick a dataset and get started on your
 
 If you have a favourite source that you like to get your data from then leave it in the comments below - I would love to expand my list of data sources. You can never have too much data, can you?
 
-{{<subscribe>}}
+{{<subscribe-sticky-bar>}}

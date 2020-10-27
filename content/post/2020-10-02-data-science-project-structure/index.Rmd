@@ -99,3 +99,5 @@ Lastly, there is the `README.md`. This file is for a quick overview of the purpo
 That's it! 
 
 This project structure shouldn't take you more than a few minutes to set up and will save you so much more time in the long run. Having a well organised project that is easy to share and come back to in the future is not to be underestimated!
+
+{{<subscribe-sticky-bar>}}
