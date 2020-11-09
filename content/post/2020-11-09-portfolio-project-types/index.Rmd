@@ -1,0 +1,55 @@
+---
+title: These Two Types of Projects Should be in Your Data Science Portfolio
+author: jobel
+date: '2020-11-09'
+slug: portfolio-project-types
+categories: []
+tags: []
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2020-11-09T20:40:29+02:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+The projects in your data science portfolio should show that you have mastery in a particular area within data science. At the end of this post you should know how many projects to include as well as the types of projects that should make up your portfolio.
+
+You can demonstrate mastery by following these two guidelines:
+
+- **Choose a specialty.** By specialising in a specific area, you will be able to obtain mastery much faster and you will get noticed as something of an expert.
+- **Demonstrate domain knowledge.** Are you looking for a position in marketing, finance, health, etc? Tailor your projects and data around the areas that your job or client are expecting you to have knowledge in.
+
+Once you know what your specialty is and what area you will be applying your skills to, you then need to know how many projects you need to have in your portfolio.
+
+For this, I recommend that you focus on two types of projects: **pillar projects** and **supporting projects**
+
+## Pillar Projects
+
+A pillar project should be able to clearly demonstrate one or more core skills from your specialty and domain. These projects tend to be larger and more in-depth than a usual project.
+
+**A portfolio should typically have 2 pillar projects.** 
+
+All aspects of this project will depend on your chosen specialty and domain and can vary greatly from person to person. 
+
+There is no one-size-fits-all here because some domain areas lean heavily on a few specific techniques which you should demonstrate thoroughly in your pillar projects.
+
+While the types of projects can vary a lot, it is recommended that you produce some kind of interactive experience for one of your pillar projects. You can differentiate yourself from the crowd immediately by building an interactive interface that your potential client or employer can view on their PC or mobile either in their own time or during the interview.
+
+Your project should be coupled with a compelling narrative that walks the reader through the project and specifically highlights the details of the core skill you are demonstrating. In addition to a write-up, you can also record a short video that summarises the key points of your project.
+
+You should know your pillar projects very well and should be able to describe the overall goals and outcomes of the project in a few sentences.
+
+## Supporting Projects
+
+**A portfolio could have anywhere from 2 to 5 supporting projects.**
+
+Your supporting projects should demonstrate other skills that you may not have demonstrated specifically in your pillar projects such as:
+
+- Data cleaning - in a data cleaning project you need to show your data munging, data preparation skills on a very dirty data set. The best way to put together a data set for this is to scrape it yourself - pick a website that interests you (such as a sports site, if you're into that sort of thing), scrape it, clean it, and have some fun with it.
+- Data visualisation - the purpose of a data visualisation project is to tell a story. You can do this in an R markdown or Jupyter notebook but I recommend that you try a platform like Tableau Public or Google Data Studio and design some dashbards that take the reader through the story in the data.
+- Data modelling - this project would contain either a supervised or unsupervised model, depending on the focus of your pillar projects.
