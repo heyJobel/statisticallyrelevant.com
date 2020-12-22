@@ -39,12 +39,15 @@ interests:
 #   For an email link, use "fas" icon pack, "envelope" icon, and a link in the
 #   form "mailto:your-email@example.com" or "#contact" for contact widget.
 social:
-- icon: envelope
-  icon_pack: fas
-  link: '#contact'  # For a direct email link, use "mailto:test@example.org".
+#- icon: envelope
+#  icon_pack: fas
+#  link: '#contact'  # For a direct email link, use "mailto:test@example.org".
+- icon: instagram
+  icon_pack: fab
+  link: https://www.instagram.com/joleenbothma/
 - icon: twitter
   icon_pack: fab
-  link: https://twitter.com/joleenbelinda
+  link: https://twitter.com/joleenbothma
 - icon: github
   icon_pack: fab
   link: https://github.com/joleenbelinda
