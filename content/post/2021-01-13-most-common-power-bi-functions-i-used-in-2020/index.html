@@ -1,0 +1,144 @@
+---
+title: The Most Common Power BI Functions I Used in 2020
+author: jobel
+date: '2021-01-13'
+slug: most-common-power-bi-functions-i-used-in-2020
+categories:
+  - power bi
+tags: []
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2021-01-13T16:43:51+02:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+
+
+<p>Power BI has been my go-to data visualisation and business intelligence tool for the last 3 years. I have both built corporate dashboards with it and used it as my own little exploration tool when I’m tackling a new data set for the first time.</p>
+<p>Since I’ve been getting more and more proficient at using the tool, there are some functions that I go back to time and time again. I had a look through the reports and analyses that I conducted in 2020 and picked out my most used DAX functions - I found 12. Read on to learn more about them.</p>
+<p>The below functions are mostly in order of usage with the first category being the most used and the last category being the least used.</p>
+<p>All generalised syntax below has been taken from the official <a href="https://docs.microsoft.com/en-us/dax/dax-function-reference">Power BI reference documentation</a>.</p>
+<div id="basic-summary-functions" class="section level2">
+<h2>1. BASIC SUMMARY FUNCTIONS</h2>
+<p>This is the only category of functions I have in this list containing 7 of the basic summary functions. These are probably going to be the first functions anybody learns when just getting started with Power BI and they are definitely going to make the list for the most common functions used by just about anybody.</p>
+<p>I would usually use any one of these functions together with the other functions coming up next. In Power BI, it isn’t always necessary to create measures just to perform a simple SUM or an AVERAGE, for example because these operations can be performed within each chart or table without needing to go through the extra effort of creating a measure.</p>
+<p>The only time I might use these functions on their own is to give the measure a more meaningful name and this allows me to:
+- Preserve the original name of the column
+- Not have to rename the chart field or table column each time I add the column to a chart/table
+- Get around the (often ugly-looking) automatic naming of fields when applying an aggregation to a field/column in a chart/table</p>
+<div id="count-distinctcount" class="section level3">
+<h3>COUNT &amp; DISTINCTCOUNT</h3>
+<p>The COUNT function counts the number of non-blank cells in a column.</p>
+<pre><code>COUNT(&lt;column&gt;)
+DISTINCTCOUNT(&lt;column&gt;)</code></pre>
+<p>And obviously DISTINCTCOUNT just counts the number of unique values.</p>
+</div>
+<div id="sum-average" class="section level3">
+<h3>SUM &amp; AVERAGE</h3>
+<p>These functions allow you to SUM or AVERAGE the values in a column</p>
+<pre><code>SUM(&lt;column&gt;)
+AVERAGE(&lt;column&gt;)</code></pre>
+</div>
+<div id="min-max" class="section level3">
+<h3>MIN &amp; MAX</h3>
+<p>These functions return the MIN or MAX values of a column</p>
+<pre><code>MIN(&lt;column&gt;)
+MAX(&lt;column&gt;)</code></pre>
+</div>
+</div>
+<div id="summarize" class="section level2">
+<h2>2. SUMMARIZE</h2>
+<p>Alright, now we get to the somewhat more interesting functions.</p>
+<p>I probably use the SUMMARIZE function the most and is my favourite (if I can actually pick a favourite).</p>
+<p>Unlike the other functions in this list (except for LASTDATE at the end), the SUMMARIZE function returns a table and I typically use it so that I can further apply aggregations over different groupings.</p>
+<p>For example, suppose my main table is highly transactional and I need to roll it up a bit so that I can create new functions that aggregate on the new rolled up table. The SUMMARIZE function will take in grouping variables and named expressions and return a new table from it.</p>
+<p>You can also join on these tables and create relationships just as you would on a normal table.</p>
+<p>Pretty nifty if you ask me.</p>
+<pre><code>SUMMARIZE (&lt;table&gt;, &lt;groupBy_columnName&gt;[, &lt;groupBy_columnName&gt;]…[, &lt;name&gt;, &lt;expression&gt;]…)</code></pre>
+<p>Here, square brackets indicate optional arguments and the <code>...</code> portion simply implies that more filters can be added.</p>
+</div>
+<div id="calculate" class="section level2">
+<h2>3. CALCULATE</h2>
+<p>The CALCULATE function performs an aggregation along with one or more filters. When you specify more than one filter, the function will perform the calculation where all filters are true.</p>
+<p>The general syntax is as follows:</p>
+<pre><code>CALCULATE(&lt;expression&gt;[, &lt;filter1&gt; [, &lt;filter2&gt; [, …]]])</code></pre>
+<p>The CALCULATE function can be useful to you force an aggregation to completely ignore some or all report-based filters. However, in the reports I have designed, I have only used this a handful of times and only for very specific use cases.</p>
+</div>
+<div id="if" class="section level2">
+<h2>4. IF</h2>
+<p>Ah, yes. The great and powerful IF function.</p>
+<p>I use the IF function A LOT. But mostly when creating a new flag or classification column and then further combining it with the other calculation functions listed here.</p>
+<p>Also feel free to nest the IF function within other IF functions as much as you like.</p>
+<pre><code>IF(&lt;logical_test&gt;, &lt;value_if_true&gt;[, &lt;value_if_false&gt;])</code></pre>
+</div>
+<div id="iferror" class="section level2">
+<h2>5. IFERROR</h2>
+<p>Very similar to the IF function above but specifically looks for any errors and returns an alternative result.</p>
+<p>This function is a life saver when trying to catch errors and display them in a more aesthetically pleasing way.</p>
+<p>Also works well with the BLANK function which returns a blank value that is readable by Power BI (because using empty quotes like " " may not be regarded as a blank and is important to note when you are filtering tables/charts).</p>
+<pre><code>IFERROR(value, value_if_error)</code></pre>
+</div>
+<div id="isblank" class="section level2">
+<h2>6. ISBLANK</h2>
+<p>Used a lot in conjunction with IF to create flags that highlight blanks or to exclude them altogether.</p>
+<pre><code>ISBLANK(&lt;value&gt;)</code></pre>
+</div>
+<div id="weekday" class="section level2">
+<h2>7. WEEKDAY</h2>
+<p>I use this function to create a week start date or week end date in my date table. The <code>return_type</code> argument is very important because it determines what day of the week the week begins on.</p>
+<pre><code>WEEKDAY(&lt;date&gt;, &lt;return_type&gt;)</code></pre>
+<p>This is the week start date formula:</p>
+<pre><code>Week Start Date = date - WEEKDAY(date, 2) + 1
+Week End Date = date - WEEKDAY(date, 2) + 7</code></pre>
+<p>This formula for week start date is the most versatile I have ever used and handles new years perfectly.</p>
+</div>
+<div id="format" class="section level2">
+<h2>8. FORMAT</h2>
+<p>This function can be used to convert columns to any format. However, I use this function to create a month-year or period column from the date column in my date table.</p>
+<pre><code>FORMAT(&lt;value&gt;, &lt;format_string&gt;)</code></pre>
+<p>This is the formula for creating a month year column:</p>
+<pre><code>MonthYear = FORMAT(date, &quot;MMM YYYY)</code></pre>
+<p>Using the FORMAT function in this way will force the resulting MonthYear column to be converted to text. However, there is a little trick for displaying this as text but allowing the correct month sorting (rather than alphabetical sorting). Leave a comment below if you’d like me to go over this little hack.</p>
+<p>There are many use cases for when you want to force Power BI to display dates in a very specific way rather than allowing it to decide how best to present your dates so don’t discount the power of using this function in this way.</p>
+</div>
+<div id="lookupvalue" class="section level2">
+<h2>9. LOOKUPVALUE</h2>
+<p>If you are familiar with VLOOKUP in Excel then you will be comfortable with LOOKUPVALUE too.</p>
+<p>This function allows you obtain a single column from another table by creating a link that exists in this function only rather than having to completely link the two tables together.</p>
+<p>However, as stated in the <a href="https://docs.microsoft.com/en-us/dax/lookupvalue-function-dax">Power BI documentation</a>:
+&gt;If there is a relationship between the result and search tables, in most cases, using RELATED function instead of LOOKUPVALUE is more efficient and provides better performance.</p>
+<pre><code>LOOKUPVALUE(
+    &lt;result_columnName&gt;,
+    &lt;search_columnName&gt;,
+    &lt;search_value&gt;
+    [, &lt;search2_columnName&gt;, &lt;search2_value&gt;]…
+    [, &lt;alternateResult&gt;]
+)</code></pre>
+</div>
+<div id="eomonth" class="section level2">
+<h2>10. EOMONTH</h2>
+<p>Used to get the last day of the month of a given date for as many months in the past or the future.</p>
+<p>This function can be useful when used together with the CALCULATE function as a filter argument.</p>
+<pre><code>EOMONTH(&lt;start_date&gt;, &lt;months&gt;)</code></pre>
+</div>
+<div id="datediff" class="section level2">
+<h2>11. DATEDIFF</h2>
+<p>Used to get the difference between 2 dates in days, months, quarters, years, etc.</p>
+<pre><code>DATEDIFF(&lt;start_date&gt;, &lt;end_date&gt;, &lt;interval&gt;)</code></pre>
+<p>You know, even after using this function so many times I always forget which way the calculation is performed and I have to try both ways. Is it start_date - end_date or is it end_date - start_date?</p>
+<p>42?</p>
+</div>
+<div id="lastdate" class="section level2">
+<h2>12. LASTDATE</h2>
+<p>This function returns the last date in a column.</p>
+<p>This function is a little sneaky in that it actually returns a table with one column and one row and so you can use it in any function that requires a table argument.</p>
+<pre><code>LASTDATE(&lt;dates&gt;)</code></pre>
+<p>I hope you find this list of functions useful to you. Once you learn a couple of the basic functions in Power BI and then expand to include a few common functions you can solve almost any problem and design powerful reports and dashboards!</p>
+<p>Happy visualising!</p>
+</div>
