@@ -18,9 +18,9 @@ image:
 projects: []
 ---
 
-Power BI has been my go-to data visualisation and business intelligence tool for the last 3 years. I have both built corporate dashboards with it and used it as my own little exploration tool when I'm tackling a new data set for the first time.
+Power BI has been my go-to data visualisation and business intelligence tool for the last 3 years. I have built corporate dashboards with it and used it as my own little exploration tool when I'm tackling a new data set for the first time.
 
-Since I've been getting more and more proficient at using the tool, there are some functions that I go back to time and time again. I had a look through the reports and analyses that I conducted in 2020 and picked out my most used DAX functions - I found 12. Read on to learn more about them.
+Since I've been getting more and more proficient at using the tool, there are some functions that I go back to time and time again. I had a look through the reports and analyses that I conducted in 2020 and picked out my most used DAX functions - I found 17 functions in total. Read on to learn more about them.
 
 The below functions are mostly in order of usage with the first category being the most used and the last category being the least used.
 
@@ -32,6 +32,7 @@ This is the only category of functions I have in this list containing 7 of the b
 I would usually use any one of these functions together with the other functions coming up next. In Power BI, it isn't always necessary to create measures just to perform a simple SUM or an AVERAGE, for example because these operations can be performed within each chart or table without needing to go through the extra effort of creating a measure.
 
 The only time I might use these functions on their own is to give the measure a more meaningful name and this allows me to:
+
 - Preserve the original name of the column
 - Not have to rename the chart field or table column each time I add the column to a chart/table
 - Get around the (often ugly-looking) automatic naming of fields when applying an aggregation to a field/column in a chart/table
