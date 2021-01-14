@@ -84,7 +84,7 @@ Pretty nifty if you ask me.
 SUMMARIZE (<table>, <groupBy_columnName>[, <groupBy_columnName>]…[, <name>, <expression>]…)
 ```
 
-Here, square brackets indicate optional arguments and the `...` portion simply implies that more filters can be added.
+Here, square brackets indicate optional arguments and the `...` portion simply implies that more arguments can be added.
 
 
 ## 3. CALCULATE
