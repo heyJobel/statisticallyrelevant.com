@@ -62,6 +62,7 @@ The default, or root, logger is set to only show messages with a severity messag
 ## Getting to know the basicConfig
 
 You can configure the logger by using the `basicConfig()` method which can only be called once, otherwise any subsequent calls will not take effect. These are the common parameters you might use and we will discuss them in more detail below:
+
 - `level` : this sets the severity level
 - `filename` : this specifies the file name
 - `filemode` : if the `filename` is given then the file will be opened in this mode. The default is a, which means append
@@ -80,6 +81,7 @@ Both the `filename` and `filemode` parameters determine whether the logger shoul
 The `filemode` parameter is set to 'a' by default, which means append but you can also use 'w' for writing which will overwrite any other log files with the same `filename`.
 
 The format parameter allows you to customise how you would like the output to look using certain attributes such as:
+
 - `%(asctime)s` - displays the date and time
 - `%(message)s` - displays the logging message
 - `%(process)d` - displays the process ID

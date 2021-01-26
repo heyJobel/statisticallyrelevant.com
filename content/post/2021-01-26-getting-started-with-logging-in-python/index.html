@@ -48,25 +48,29 @@ logging.critical(&quot;CRITICAL FAILURE!&quot;)</code></pre>
 </div>
 <div id="getting-to-know-the-basicconfig" class="section level2">
 <h2>Getting to know the basicConfig</h2>
-<p>You can configure the logger by using the <code>basicConfig()</code> method which can only be called once, otherwise any subsequent calls will not take effect. These are the common parameters you might use and we will discuss them in more detail below:
-- <code>level</code> : this sets the severity level
-- <code>filename</code> : this specifies the file name
-- <code>filemode</code> : if the <code>filename</code> is given then the file will be opened in this mode. The default is a, which means append
-- <code>format</code> : the format of the log message</p>
+<p>You can configure the logger by using the <code>basicConfig()</code> method which can only be called once, otherwise any subsequent calls will not take effect. These are the common parameters you might use and we will discuss them in more detail below:</p>
+<ul>
+<li><code>level</code> : this sets the severity level</li>
+<li><code>filename</code> : this specifies the file name</li>
+<li><code>filemode</code> : if the <code>filename</code> is given then the file will be opened in this mode. The default is a, which means append</li>
+<li><code>format</code> : the format of the log message</li>
+</ul>
 <p>Starting with the level parameter, you can set the severity level of the log messages and the logger will output all messages at or above the level you specify. For example:</p>
 <pre><code>logging.basicConfig(level = logging.ERROR)
 logging.debug(&quot;This debug message will not be logged&quot;)
 logging.error(&quot;This error message will be logged&quot;)</code></pre>
 <p>Both the <code>filename</code> and <code>filemode</code> parameters determine whether the logger should output to a file rather than to the console. If no <code>filename</code> is specified then by default the logger will print the logs to the console.</p>
 <p>The <code>filemode</code> parameter is set to ‘a’ by default, which means append but you can also use ‘w’ for writing which will overwrite any other log files with the same <code>filename</code>.</p>
-<p>The format parameter allows you to customise how you would like the output to look using certain attributes such as:
-- <code>%(asctime)s</code> - displays the date and time
-- <code>%(message)s</code> - displays the logging message
-- <code>%(process)d</code> - displays the process ID
-- <code>%(levelname)s</code> - displays the severity level of the message
-- <code>%(filename)s</code> - displays the name of the file the log is written to
-- <code>%(lineno)d</code> - displays the line number of where the logging call was issued from in the source file
-- <code>%(funcName)s</code> - name of the function containing the logging call</p>
+<p>The format parameter allows you to customise how you would like the output to look using certain attributes such as:</p>
+<ul>
+<li><code>%(asctime)s</code> - displays the date and time</li>
+<li><code>%(message)s</code> - displays the logging message</li>
+<li><code>%(process)d</code> - displays the process ID</li>
+<li><code>%(levelname)s</code> - displays the severity level of the message</li>
+<li><code>%(filename)s</code> - displays the name of the file the log is written to</li>
+<li><code>%(lineno)d</code> - displays the line number of where the logging call was issued from in the source file</li>
+<li><code>%(funcName)s</code> - name of the function containing the logging call</li>
+</ul>
 <p>This information can be very useful fo narrowing down exactly where some code might of gone wrong and will speed up the time it takes to find errors or problems. This is my preferred format string:</p>
 <pre><code>basicConfig(format = &quot;%(asctime)s — %(levelname)s — %(funcName)s: %(lineno)d — %(message)s&quot;)</code></pre>
 </div>
