@@ -20,18 +20,20 @@ projects: []
 
 
 
-<p>Power BI has been my go-to data visualisation and business intelligence tool for the last 3 years. I have both built corporate dashboards with it and used it as my own little exploration tool when I’m tackling a new data set for the first time.</p>
-<p>Since I’ve been getting more and more proficient at using the tool, there are some functions that I go back to time and time again. I had a look through the reports and analyses that I conducted in 2020 and picked out my most used DAX functions - I found 12. Read on to learn more about them.</p>
+<p>Power BI has been my go-to data visualisation and business intelligence tool for the last 3 years. I have built corporate dashboards with it and used it as my own little exploration tool when I’m tackling a new data set for the first time.</p>
+<p>Since I’ve been getting more and more proficient at using the tool, there are some functions that I go back to time and time again. I had a look through the reports and analyses that I conducted in 2020 and picked out my most used DAX functions - I found 17 functions in total. Read on to learn more about them.</p>
 <p>The below functions are mostly in order of usage with the first category being the most used and the last category being the least used.</p>
 <p>All generalised syntax below has been taken from the official <a href="https://docs.microsoft.com/en-us/dax/dax-function-reference">Power BI reference documentation</a>.</p>
 <div id="basic-summary-functions" class="section level2">
 <h2>1. BASIC SUMMARY FUNCTIONS</h2>
 <p>This is the only category of functions I have in this list containing 7 of the basic summary functions. These are probably going to be the first functions anybody learns when just getting started with Power BI and they are definitely going to make the list for the most common functions used by just about anybody.</p>
 <p>I would usually use any one of these functions together with the other functions coming up next. In Power BI, it isn’t always necessary to create measures just to perform a simple SUM or an AVERAGE, for example because these operations can be performed within each chart or table without needing to go through the extra effort of creating a measure.</p>
-<p>The only time I might use these functions on their own is to give the measure a more meaningful name and this allows me to:
-- Preserve the original name of the column
-- Not have to rename the chart field or table column each time I add the column to a chart/table
-- Get around the (often ugly-looking) automatic naming of fields when applying an aggregation to a field/column in a chart/table</p>
+<p>The only time I might use these functions on their own is to give the measure a more meaningful name and this allows me to:</p>
+<ul>
+<li>Preserve the original name of the column</li>
+<li>Not have to rename the chart field or table column each time I add the column to a chart/table</li>
+<li>Get around the (often ugly-looking) automatic naming of fields when applying an aggregation to a field/column in a chart/table</li>
+</ul>
 <div id="count-distinctcount" class="section level3">
 <h3>COUNT &amp; DISTINCTCOUNT</h3>
 <p>The COUNT function counts the number of non-blank cells in a column.</p>
@@ -61,7 +63,7 @@ MAX(&lt;column&gt;)</code></pre>
 <p>You can also join on these tables and create relationships just as you would on a normal table.</p>
 <p>Pretty nifty if you ask me.</p>
 <pre><code>SUMMARIZE (&lt;table&gt;, &lt;groupBy_columnName&gt;[, &lt;groupBy_columnName&gt;]…[, &lt;name&gt;, &lt;expression&gt;]…)</code></pre>
-<p>Here, square brackets indicate optional arguments and the <code>...</code> portion simply implies that more filters can be added.</p>
+<p>Here, square brackets indicate optional arguments and the <code>...</code> portion simply implies that more arguments can be added.</p>
 </div>
 <div id="calculate" class="section level2">
 <h2>3. CALCULATE</h2>
