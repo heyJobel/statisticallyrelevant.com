@@ -72,7 +72,7 @@ email: ""
 
 I am so glad you are here! 
 
-You have found one of the best places to get started building data science projects.
+You have found one of the best places to level up your data science skills and knowledge.
 
 We have all heard that if you want to succeed at something, you need to put in the work and practice! This is especially true for data science. You need to apply your skills by building data science projects and having fun with it, too!
 
