@@ -1,0 +1,137 @@
+---
+title: How to Analyse Google Sheets Data in Python Using EZSheets
+author: jobel
+date: '2021-03-31'
+slug: how-to-analyse-google-sheets-data-in-python-using-ezsheets
+categories:
+  - python
+tags: []
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2021-03-31T07:55:03+02:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+It is quick and easy to start analysing Google Sheets data in Python using the EZSheets library. 
+
+I typically write python scripts that automate the extraction and analysis of data stored in Google Drive. The best use case I have found for this is when using Google Forms. There are situations where you may be collecting data in Google Forms on an ongoing basis, and you may need to have this data automatically updated and available for your analyses and downloading the data set manually just isn't going to cut it. Don't work for your computer, make your computer work for you. 
+
+This blog post will show you how to set up the EZSheets library and then how to work with the Google Sheets data.
+
+## Setting up EZSheets
+
+There are 3 steps for setting up EZSheets and we will go through each of these below.
+
+1. Install the EZSheets library
+2. Enable the API's
+3. Authentication
+
+### Step 1: Install the EZSheets library
+
+Install EZSheets by running the following command in a terminal window. This library can only be installed with pip so if you use Anaconda you cannot use the 'conda install' command:
+
+```python
+pip install ezsheets
+```
+
+The convenient thing about the EZSheets library is that it handles all interactions with the Google API and you don't have to import any additional libraries.
+
+### Step 2: Enable the API's
+
+To start you need to enable the API's for your Google Account. You will need to enable 2 API's: Google Sheets and Google Drive. 
+
+Head over to the developer console using these 2 links and click the enable API buttons at the top of each:
+
+- Sheets API: [https://console.developers.google.com/apis/library/sheets.googleapis.com/](https://console.developers.google.com/apis/library/sheets.googleapis.com/)
+- Drive API: [https://console.developers.google.com/apis/library/drive.googleapis.com/](https://console.developers.google.com/apis/library/drive.googleapis.com/)
+
+### Step 3: Authentication
+
+Next up, you need to have 3 authentication files saved in the same folder as your python script. The naming of these files are very important so make sure it is exactly the same:
+
+1. A credentials file named ***credentials-sheets.json***
+2. A token for Google Sheets named ***token-sheets.pickle***
+3. A token for Google Drive named ***token-drive.pickle***
+
+OK, so how do you get these files? Let's go through each one.
+
+***File 1: credentials-sheets.json:***
+
+This is the most important file and you can get it simply by following the Google QuickStart guide for python at the link below. Don't worry about the name of the project, you can just leave it as 'QuickStart' (for some reason this actually bothered me initially, like I had a compulsion to give it a relevant name to my project - not necessary).
+
+[https://developers.google.com/sheets/api/quickstart/python/](https://developers.google.com/sheets/api/quickstart/python/)
+
+You will eventually reach a screen that gives you the option to download client configuration, so go ahead and do that and a *credentials.json* file will be downloaded which you must rename to *credentials-sheets.json* in order to work with the EZSheets module.
+
+***File 2: token-sheets.pickle:***
+
+Now you need to run `import ezsheets` which will open up a new browser window where you will need to log into your Google account and give the 'Quickstart' project permissions to access your Google account. This authenticates Google Sheets and will create the *token-sheets.pickle* file. 
+
+***File 3: token-drive.pickle:***
+
+Getting the last file needs a small trick. Reading the book [Automate the Boring Stuff](https://automatetheboringstuff.com/2e/chapter14/), the instructions state that two browser windows will open when you run the command `import ezsheets` so that you can authenticate for Sheets and then for Drive but this did not happen for me. The only thing that seemed to work was that I had to actually call a function in the `ezsheets` library for it to bring up the second authentication window. Once you do that, the *token-drive.pickle* file will be created. 
+
+Luckily you only have to do this whole process once and you can use these files as needed in your projects.
+
+It goes without saying that these 3 files should never be shared with anyone (and don't commit to git or push to your git hosting platform).
+
+## Working with Google Sheets Data
+
+Alright, so we're finally ready to start working with some Google Sheets data. I have some pokemon data stored in my Google Drive that I am going to use as an example. There are a lot of really fancy stuff that you can do with the EZSheets library but I have not yet found the need to use any of it beyond just downloading data so I can run some analyses. If you are looking to go deeper into this library then I recommend reading Chapter 14 of the book [Automate the Boring Stuff](https://automatetheboringstuff.com/2e/chapter14/). 
+
+In this example I will import 2 libraries: EZSheets and Pandas.
+
+```python
+import ezsheets
+import pandas as pd
+```
+
+To access a spreadsheet, we need the spreadsheet ID. You can find it by navigating to your spreadsheet in your browser and inspecting the URL. Typically, the format of the URL will look something like this:
+
+```html
+https://docs.google.com/spreadsheets/d/SPREADSHEETID/
+```
+
+Then, enter your spreadsheet ID
+
+```python
+# Access spreadsheet using the spreadsheet ID
+pokemon_spreadsheet = ezsheets.Spreadsheet('SPREADSHEETID') 
+```
+
+Using the `sheets` method on this object will return a list of attributes for each sheet in the spreadsheet. In this example, there is only 1 sheet and so we access it like this:
+
+```python
+# Access the first sheet in the list
+pokemon_sheet = pokemon_spreadsheet[pokemon_spreadsheet.sheets[0].title]
+```
+
+OK, now we are ready to import the data into our workspace. There are 3 steps we need to follow to get the data into a user-friendly format:
+
+1. Get all the rows in the sheet
+2. Save as a pandas DataFrame
+3. Set the header row
+
+```python
+# (1) Get all rows from sheet (stores as list)
+data_rows = pokemon_sheet.getRows()
+
+# (2) Store data rows as pandas dataframe
+pokemon_df = pd.DataFrame(data_rows)
+
+# (3) Header row is usually not captured correctly
+# Save the first row as the header row
+new_header = pokemon_df.iloc[0]
+# Remove the first row
+pokemon_df = pokemon_df[1:]
+# Set the header row
+pokemon_df.columns = new_header
+```
+
+You're all set! I hope you found this blog post useful. Let me know how you use Google Sheets data in python.
