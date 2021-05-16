@@ -1,0 +1,107 @@
+---
+title: 5 Steps to Developing your First Data Analytics Strategy
+author: jobel
+date: '2021-05-16'
+slug: 5-steps-to-developing-your-first-data-analytics-strategy
+categories:
+  - data strategy
+tags: []
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2021-05-16T11:37:23+02:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+> Those companies that view data as a strategic asset and develop robust data and analytics strategies are the ones that will succeed in this new data-driven world.
+— [Bernard Marr](https://www.bernardmarr.com/default.asp?contentID=768)
+
+It is very easy to get caught up in the latest buzzword, jumping on the big data bandwagon without any clear direction on where you would like all that data to take you and how it can actually benefit your organisation.
+
+Analytics is not something you do just so that you can have the bragging rights to say "yeah, we do all the big learning, deep data analytics stuff". It is a journey your organisation goes on - analytics is something you nurture and develop within your organisation so that you can eventually cultivate an environment that supports better data-driven decision making and thus promotes a sense of curiosity in the organisation that is also backed up by facts and data. 
+
+By going through the following 5 steps in this blog post, you will be able to put together an analytics strategy that identifies the focus of your analytics initiatives, understand what data, analytical talent and infrastructure is required to carry out those initiatives, as well as the vision of what success looks like and exactly how analytics will benefit your organisation.
+
+Think of each step like a roadmap: start with the lowest-hanging fruit and then rank each potential project along the roadmap according to the complexity of the requirements. Eventually you will have laid out the journey in front of you showing the progression of analytics within your organisation. 
+
+It is also worth noting that an organisation does not have 1 single analytics strategy that lasts throughout the lifetime of the organisation. An analytics strategy will follow the strategic objectives of the organisation and will change as the strategic objectives change.
+
+## Step 1: Strategic Objectives
+
+> A good data strategy is not about what data is readily or potentially available – it’s about what your business wants to achieve, and how data can help you get there 
+- [Bernard Marr](https://www.bernardmarr.com/default.asp?contentID=768)
+
+When putting together a data analytics strategy, the organisation first needs to identify its own  strategic objectives for the business and then it can determine how data and analytics can help them achieve those objectives. 
+
+When setting a focus for their first or next analytical project, an organisation can ask themselves:
+
+- What is our current strategic objective?
+- What information or insights do I need to achieve this strategic objective?
+- What key decisions within the strategic objective need support from analytics?
+
+For example, the key business objective for quarter one could be to increase market share. The organisation then needs to break down the various decisions that need to be made to achieve this objective and what kinds of information might be needed to make those decisions. From this they can determine one or more focal areas to target their analytical efforts.
+
+Doing this will ensure that the analytics project is highly relevant to the current needs of the organisation and will improve the chances of success and will maximise the value that analytics can add. 
+
+For organisations that are that have never implemented analytics before in their organisation, there is often a need to first prove the value of analytics before any investments are made by the organisation. This can be very tricky and almost entirely depends on the amount of senior-level support there is for analytics. According to the book [Competing on Analytics by Thomas H. Davenport](https://www.amazon.com/Competing-Analytics-Updated-Introduction-Science/dp/1633693724/ref=pd_lpo_14_t_0/144-7252933-6082336?_encoding=UTF8&pd_rd_i=1633693724&pd_rd_r=7d5f9dc5-f58a-4958-9f07-028ec3365dfe&pd_rd_w=4errb&pd_rd_wg=PPyM0&pf_rd_p=a0d6e967-6561-454c-84f8-2ce2c92b79a6&pf_rd_r=PSF4HF19A5PSTFY7SE69&psc=1&refRID=PSF4HF19A5PSTFY7SE69), when there is analytical support at the highest level of the organisation then analytics will advance rapidly. However, when the organisation must take the 'prove-it' approach then these are the steps they can follow:
+
+1. Find a sponsor and a business problem that can benefit from analytics
+2. Implement a small, localised project to add value and produce measurable benefits
+3. Document the benefits and share the news with key stakeholders
+4. Continue to build localised successes until the organisation has acquired enough experience and sponsorship to develop an organisation-wide analytics strategy that directly supports the strategic objectives of the organisation
+
+Once the organisation has identified a focus for their analytics project (and have some senior-level support), they now need to assess what the organisation's current capability is for analytics: that is what data they already have, whether they have analytical talent and what IT infrastructure they possess. It's no good investing in high quality data or upgrading the IT infrastructure if the organisation does not have anyone with the skills to analyse the data and carry out the project to completion. 
+
+Each of these areas must at least have some capability and if not then there should be a plan for how to improve that area before beginning an analytics project. This does not mean that the organisation must first have the best-in-class talent or data or infrastructure before starting their project - in most cases that requirements are much lower and it is far easier to get started than you may think.
+
+## Step 2: Data
+
+This step involves questions such as:
+
+- What data do we need?
+- How will we gather the data?
+- How will the data be analysed?
+- What level of detail is required in the data?
+- How will we report and present insights?
+
+Remember that not all business problems are solved with machine learning and AI - very often all that is needed initially are a few key insights and as the organisations analytical capabilities improve then more advanced statistical modelling can be explored. 
+
+Thus analytical initiatives can be ranked according to their complexity and time requirement. You may start with the relatively simple, quick analyses that benefit the organisation in the shortest time possible and thereafter larger, more complex projects can be carried out.
+
+## Step 3: Analytical Talent
+
+In this step, you will need to determine who you can hire or train to advance the chosen analytical initiative for the lowest-hanging fruit. You can determine the type of skills your employees require if you know exactly what is required for the project (i.e. thoroughly mapping out the requirements from step 1 and 2)
+
+Answer these questions as a guide:
+
+- What are the current data competencies within the organisation?
+- Do we need to hire more analytical talent?
+- Do they need to have knowledge of specific software?
+- Do they need to have knowledge of specific analytical techniques?
+
+## Step 4: Infrastructure
+
+In this step you will need to determine:
+
+- What are the technology requirements of each project along the roadmap?
+- How should our technology be developed to support each analytical initiative and can we upgrade the technology in a similar time frame?
+
+Initially, your infrastructure requirements may be very low for projects that involve obtaining just a few key insights - typically all that is needed is spreadsheet software and a some good questions that need answers. However, as you progress along your roadmap, you will inevitably need more complex infrastructure that can support your analytics on a consistent, ongoing basis.
+
+## Step 5: Definition of Success
+
+For each analytics project that the organisation undertakes, there should always be a clear definition or vision of what success looks like at the end of the project and exactly how the project can benefit the organisation.
+
+Ask yourself what the project's key performance metrics are that can be monitored throughout the project.
+
+Having this last step in place will prevent analysis-paralysis, causing a project to take much longer than it needs to. This could also allow the analytics team or management to make a decision early on that the project is a failure and quickly change course and focus their efforts on something more productive and valuable.
+
+If you want to go deeper on the topic of analytics strategy then I recommend these books:
+
+1. [Competing on Analytics: The New Science of Winning](https://www.amazon.com/Competing-Analytics-Updated-Introduction-Science/dp/1633693724)
+2. [Data Strategy: How to Profit from a World of Big Data, Analytics and the Internet of Things](https://www.amazon.com/Data-Strategy-Profit-Analytics-Internet/dp/074947985X/ref=sr_1_1?dchild=1&keywords=data+strategy&qid=1621155700&s=books&sr=1-1)
