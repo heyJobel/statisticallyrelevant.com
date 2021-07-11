@@ -1,6 +1,6 @@
 ---
 # Display name
-title: Joleen Belinda
+title: Joleen Bothma
 
 # Username (this should match the folder name)
 authors:
@@ -10,7 +10,7 @@ authors:
 superuser: true
 
 # Role/position
-role: Data Science Enthusiast
+role: Data Scientist
 
 # Organizations/Affiliations
 #organizations:
@@ -18,7 +18,7 @@ role: Data Science Enthusiast
 #  url: ""
 
 # Short bio (displayed in user profile at end of posts)
-bio: Statistics graduate paving my own way through the world of data science
+bio: Helping fellow data scientists and businesses level up their skills and make better data-driven decisions
 
 interests:
 
@@ -51,9 +51,9 @@ social:
 - icon: github
   icon_pack: fab
   link: https://github.com/joleenbelinda
-- icon: pinterest
+- icon: linkedin
   icon_pack: fab
-  link: https://pinterest.com/statisticallyrelevant
+  link: https://www.linkedin.com/in/joleenbothma/
 # Link to a PDF of your resume/CV from the About widget.
 # To enable, copy your resume/CV to `static/files/cv.pdf` and uncomment the lines below.
 # - icon: cv
@@ -72,7 +72,7 @@ email: ""
 
 I am so glad you are here! 
 
-You have found one of the best places to level up your data science skills and knowledge.
+You have found one of the best places to level up your data science skills and learn how to make better data-driven decisions.
 
 We have all heard that if you want to succeed at something, you need to put in the work and practice! This is especially true for data science. You need to apply your skills by building data science projects and having fun with it, too!
 
@@ -96,8 +96,18 @@ Stick around because we will guide you through your first data science project a
 
 ---
 
+## Why Should My Business Decisions be Driven by Data?
+
+One of my favourite quotes is by Bernard Marr - "Those companies that view data as a strategic asset and develop robust data and analytics strategies are the ones that will succeed in this new data-driven world." 
+
+I believe this to be completely true and we have never been in a better position than we are in right now to take advantage of data in all our business processes - including decision making.
+
+When you nurture and develop analytics within your organisation, you can eventually cultivate an environment that promotes a sense of curiosity in the organisation that is also backed up by facts and data. 
+
+---
+
 ## So Who Am I and Why Am I Qualified To Talk About This?
 
-My name is Joleen Belinda Bothma (aka Jobel) and I first learnt about data science towards the end of my undergrad. Fast forward to today and I have a Masters Degree in Statistics and an absolute thirst for knowledge for all things 'data science'.
+My name is Joleen Bothma and I first learnt about data science towards the end of my undergrad. Fast forward to today and I have a Masters Degree in Statistics and an absolute thirst for knowledge for all things 'data science'.
 
-During all my years at university I have always been more interested in how to apply concepts and analyse data rather than proving theorems. There is nothing more satisfying than taking a csv file with thousands (or even hundreds of thousands) of lines of data and turning that into beautiful charts or meaningful models that solves problems and answers questions that actually mean something to me or my community.
+During all my years at university I have always been more interested in how to apply concepts and analyse data rather than proving theorems. There is nothing more satisfying than taking a csv file with thousands (or even hundreds of thousands) of lines of data and turning that into beautiful charts or meaningful models that solves problems and answers questions that actually mean something to me or move a business closer to their strategic goals.

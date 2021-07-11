@@ -1282,11 +1282,13 @@ pokedexExpClass &lt;- pokedexTidyData %&gt;%
 # Reorder factor levels
 pokedexExpClass &lt;- pokedexExpClass %&gt;%  
   mutate(experience_class = fct_relevel(experience_class, c(&quot;Fast&quot;, &quot;Medium Fast&quot;, &quot;Medium Slow&quot;, &quot;Slow&quot;, &quot;Fluctuating&quot;)))</code></pre>
-<p>The four core stats of a Pokemon are:
-* Attack - the amount of physical attack damage a Pokemon can do
-* Defense - the amount of physical attack damage a Pokemon can take
-* Speed - determines when a Pokemon can attack in a turn
-* HP - the number of health points a Pokemon has</p>
+<p>The four core stats of a Pokemon are:</p>
+<ul>
+<li>Attack - the amount of physical attack damage a Pokemon can do</li>
+<li>Defense - the amount of physical attack damage a Pokemon can take</li>
+<li>Speed - determines when a Pokemon can attack in a turn</li>
+<li>HP - the number of health points a Pokemon has</li>
+</ul>
 <pre class="r"><code>expClass_tbl &lt;- pokedexExpClass %&gt;%
   group_by(experience_class) %&gt;%
   summarise(avg_attack = mean(attack),
