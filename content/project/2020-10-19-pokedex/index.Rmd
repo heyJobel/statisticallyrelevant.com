@@ -167,6 +167,7 @@ pokedexExpClass <- pokedexExpClass %>%
 
 
 The four core stats of a Pokemon are: 
+
 * Attack - the amount of physical attack damage a Pokemon can do
 * Defense - the amount of physical attack damage a Pokemon can take
 * Speed - determines when a Pokemon can attack in a turn

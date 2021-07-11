@@ -101,7 +101,15 @@ Ask yourself what the project's key performance metrics are that can be monitore
 
 Having this last step in place will prevent analysis-paralysis, causing a project to take much longer than it needs to. This could also allow the analytics team or management to make a decision early on that the project is a failure and quickly change course and focus their efforts on something more productive and valuable.
 
+## References / Further Reading
+
 If you want to go deeper on the topic of analytics strategy then I recommend these books:
 
 1. [Competing on Analytics: The New Science of Winning](https://www.amazon.com/Competing-Analytics-Updated-Introduction-Science/dp/1633693724)
 2. [Data Strategy: How to Profit from a World of Big Data, Analytics and the Internet of Things](https://www.amazon.com/Data-Strategy-Profit-Analytics-Internet/dp/074947985X/ref=sr_1_1?dchild=1&keywords=data+strategy&qid=1621155700&s=books&sr=1-1)
+
+References for this post:
+
+1. [Why Every Business Needs a Data and Analytics Strategy, Bernard Marr](https://www.bernardmarr.com/default.asp?contentID=768)
+2. [Six Steps to a Business-Driven Analytics Strategy, SAS](https://blogs.sas.com/content/hiddeninsights/2013/10/13/six-steps-to-a-business-driven-analytics-strategy/)
+3. [Competing on Analytics: The New Science of Winning](https://www.amazon.com/Competing-Analytics-Updated-Introduction-Science/dp/1633693724)
