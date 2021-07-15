@@ -1,0 +1,113 @@
+---
+title: 'The Secret To Doing Less as a Data Scientist: Automate Your Tasks With Python'
+author: jobel
+date: '2021-07-14'
+slug: the-secret-to-doing-less-as-a-data-scientist-automate-your-tasks-with-python
+categories:
+  - python
+tags: []
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2021-07-12T16:31:06+02:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+draft: true
+---
+
+
+
+<p>Task automation has become an invaluable tool in my arsenal as a data scientist. My only regret is not getting started with automation sooner. In the past, I have felt intimidated by the process of automation because I always thought it was an intensive, tedious process. I have come to learn that automation has done the exact opposite for me: I am able to get more done and ‘work’ less because of all the tasks I have automated.</p>
+<p>In this blog post, I would like to introduce you to automation with python and give you my top 3 most used code snippets. I hope you will walk away with a good place to start in your automation journey, something I wish I had when I was just getting started.</p>
+<div id="why-should-you-automate-stuff" class="section level2">
+<h2>Why should you automate stuff?</h2>
+<p>Essentially, automation removes tedious, repetitive tasks from your daily work. As data scientists, the most tedious part of our job is preparing and cleaning data and we should aim to automate these tasks as much as possible. I don’t know about you but the thought of spending even an hour a day just formatting and pre-processing data is the very opposite of my definition of work satisfaction.</p>
+<p>The goal in automation is to get our work done faster and without error (’cause, you know, we’re still human) so that we can work on stuff that is actually fun and interesting.</p>
+</div>
+<div id="how-do-you-decide-what-stuff-to-automate" class="section level2">
+<h2>How do you decide what stuff to automate?</h2>
+<p>When deciding what tasks should be automated, you first need to determine what tasks you carry out in your job on a daily, weekly, monthly basis. Think carefully about all the tasks, big and small that you do and list them out. Determine which of them are highly repetitive and circle them (these are tasks that contain a series of identical steps that you need to go through every time you carry out the task).</p>
+<p>For example, lets assume that you have a daily task where you need to convert an Excel file to a csv. This is an extremely reptitive task and although it could be really quick to do, it can quickly become tedious if you have 10, 20 or more files that you need to convert to csv. So we can circle this task on our list as a possible candidate for automation.</p>
+</div>
+<div id="the-stuff-ive-automated-and-lessons-learned" class="section level2">
+<h2>The stuff I’ve automated and lessons learned</h2>
+<p>To help give you some ideas of what you can automate, I have provided a few code snippets below of the common tasks that I tend to automate for new and existing projects. Each of these tasks can be combined into a single Python script or they can be used on their own, it all depends on what you’re trying to achieve.</p>
+<p>I have included some example code to get you started if you’d like to perform these same tasks in your own work. My code below is written in Python version 3.9.</p>
+<p>I always use Python when writing scripts and automating tasks. Python is one of the most popular programming languages used in data science and there is no shortage of resources available online if you need help with just about anything. If you don’t know how to automate a tasks, just Google it and I am fairly certain you will find something helpful.</p>
+<div id="downloading-an-attachment-from-an-email-this-example-is-for-gmail-only" class="section level3">
+<h3>Downloading an attachment from an email (this example is for Gmail only)</h3>
+<p>In this script, using the <code>ezgmail</code> package you can easily download email attachments and store them in a folder. This is especially useful if you regularly receive reports via email and you need to download them into a specific file path for further analysis.</p>
+<p>In this script, search parameters are defined first. The parameters used here are the <code>subject</code> as well as <code>newer_than</code> so only recent emails are located.</p>
+<p>Libraries: <code>ezgmail</code></p>
+<pre class="python"><code># Define inbox search parameters
+threads = ezgmail.search(&#39;subject:EmailSubjectLine AND newer_than:1d&#39;)
+
+# Download all attachments to folder in current working directory
+threads[0].messages[0].downloadAllAttachments(downloadFolder=&#39;MyPath&#39;)
+</code></pre>
+</div>
+<div id="convert-to-csv" class="section level3">
+<h3>Convert to csv</h3>
+<p>This script will find all the Excel (.xlsx) files in a folder and store each file path in a list. Then, each file is imported, a filename is created for the resulting csv file and finally the file is exported to csv.</p>
+<p>I specify the pipe (“|”) delimiter for all my csv files because this is least likely to interfere with any text data and it keeps everything consistent. I also make sure to exclude the index because pandas likes to throw that in there.</p>
+<p>Libraries: <code>glob</code>, <code>os</code>, <code>pandas</code></p>
+<pre class="python"><code># Obtain list of files in path
+files = glob.glob(os.path.join(&quot;MyPath&quot;, &quot;*.xlsx&quot;)
+
+# Import the file and export to csv
+for f in files:
+    # Import data
+    df = pd.read_excel(f, sheet_name = 0) # Take first sheet
+    # Create a filename for new csv file
+    filename = f.split(&quot;.&quot;)[-2].split(&quot;\\\\&quot;)[-1]
+    # Export to csv (with pipe delimiter and no index column)
+    df.to_csv(os.path.join(&quot;MyPath&quot;, str(filename)+&#39;.csv&#39;),sep = &quot;|&quot;,index=False)
+</code></pre>
+</div>
+<div id="uploading-data-to-aws-s3" class="section level3">
+<h3>Uploading data to AWS S3</h3>
+<p>If you store your data in AWS S3 then you can use this script as part of your workflow to upload data to S3. Using the previous 2 scripts together with this last script you can create a workflow that downloads an email attachment (excel file), converts it to csv, and then uploads it to S3.</p>
+<p>Pretty neat, right? Just imagine the cumulative time you can save by running this workflow on a daily basis.</p>
+<p>Libraries: <code>boto3</code>, <code>glob</code>, <code>os</code>,</p>
+<pre class="python"><code># Define S3 Resource
+s3 = boto3.resource(
+    service_name=&#39;s3&#39;,
+    region_name= &quot;REGION&quot;,
+    aws_access_key_id = &quot;ACCESSKEY&quot;,
+    aws_secret_access_key &quot;SECRETKEY&quot;
+)
+
+# Obtain list of csv files in path
+toupload = glob.glob(os.path.join(&#39;MyPath&#39;, &quot;*.csv&quot;))
+
+# Upload files to S3 bucket
+for f in toupload:
+    key_name = f.split(&quot;\\\\&quot;)[-1]
+    s3.Bucket(&#39;MyBucket&#39;).upload_file(Filename=f, Key=&#39;My/Object/Key&#39;+key_name)
+</code></pre>
+<p>A little note: I know I have the access key and secret key stored as strings in this script but this is for demonstration purposes only and you should not expose your secrets in this way.</p>
+<p>You can rather store them as variables in a separate .py file that you can exclude from your version control system. Keep it secret. Keep it safe. (Yes, that was a Gandalf quote, just in case you were wondering)</p>
+</div>
+</div>
+<div id="scheduling-tasks-on-windows" class="section level2">
+<h2>Scheduling Tasks on Windows</h2>
+<p>Having worked exclusively in Windows virtual machines to schedule my scripts to run automatically, I am just going to give you a little peek into how I do that.</p>
+<p>I use Anaconda to create virtual environments for my scripts and because of that, I need to write a little batch script that activates the relevant conda environment and runs the python script.</p>
+<p>The batch file looks something like this:</p>
+<pre><code>@echo off
+cd &quot;Path\\To\\My\\Script\\Directory&quot;
+call conda activate my_environment
+python &quot;my_python_script.py&quot;
+call conda deactivate</code></pre>
+<p>Then, inside Windows Task Scheduler I set up a basic task to run a program and enter the path to the batch file and set a regular time for it to kick off and that’s it!</p>
+<p>Automating tedious tasks is an incredibly simple process. If you are feeling intimidated by automation then I encourage you to just try out the scripts in this blog post and see how it feels to have minutes of your life handed back to you ⌛️</p>
+<p>As I end off this post, I leave you with 2 quick tips:</p>
+<ul>
+<li>Always write your code in functions that complete as small a task as possible. That way you can easily re-purpose functions for different scripts and different purposes without needing to rewrite any code.</li>
+<li>Use the built-in python <code>logging</code> library to create log files so that you can easily identify the cause of errors if they come up and fix them quickly. Check out my blog post on <a href="post/getting-started-with-logging-in-python">how to get started with the logging module</a> if you’d like to learn more.</li>
+</ul>
+</div>
